@@ -38,7 +38,8 @@ module.exports = {
         repo: 'fyhhub/fyhhub.github.io',
         repoId: 'R_kgDOGcGXUw',
         category: 'General',
-        categoryId: 'DIC_kwDOGcGXU84CQ1aV'
+        categoryId: 'DIC_kwDOGcGXU84CQ1aV',
+        inputPosition: 'bottom'
       },
       mdEnhance: {
         demo: true,
