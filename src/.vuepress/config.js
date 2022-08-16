@@ -12,18 +12,32 @@
 const path = require('path')
 const sidebar = require('./sidebar').sidebar
 const { hopeTheme } = require('vuepress-theme-hope')
+const { searchPlugin } = require('@vuepress/plugin-search')
+
 module.exports = {
   title: 'fyhub’s blog',
   description: '博客',
   dest: path.resolve(__dirname, '../../docs'),
   base: '/',
   plugins: [
+    searchPlugin({
+      locales: {
+        '/': {
+          placeholder: 'Search',
+        },
+        '/zh/': {
+          placeholder: '搜索',
+        },
+      },
+    }),
   ],
   theme: hopeTheme({
     repo: "fyhhub/fyhhub.github.io",
     repoLabel: "GitHub",
     repoDisplay: true,
     lastUpdated: '最后更新时间',
+    editLink: false,
+    contributors: false,
     sidebar,
     navbar: require('./sidebar').nav,
     themeColor: {
