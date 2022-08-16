@@ -41,7 +41,12 @@ module.exports = {
         categoryId: 'DIC_kwDOGcGXU84CQ1aV'
       },
       mdEnhance: {
-        enableAll: true
+        demo: true,
+        codetabs: true,
+        tabs: true,
+        tasklist: true,
+        playground: true,
+        mermaid: true,
       }
     }
   }),
