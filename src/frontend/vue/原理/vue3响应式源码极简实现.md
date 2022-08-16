@@ -1,6 +1,6 @@
 # vue3响应式源码极简实现
 :::: tabs
-::: tab JS
+@tab JS
 ```js
 const proxyMap = new Map()
 const targetMap = new WeakMap()
@@ -78,9 +78,9 @@ function reactive(target) {
   })
 }
 ```
-:::
 
-::: tab HTML
+
+@tab HTML
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -108,7 +108,7 @@ function reactive(target) {
 </body>
 </html>
 ```
-:::
+
 ::::
 
 

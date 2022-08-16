@@ -1,14 +1,17 @@
 # CSS实现一个扇形
-::: demo [react]
-```js
-export default function App() {
-  return (
-    <div>
-      <div className="sector"></div>
-    </div>
-  )
-}
-App.__style__ = `
+
+::: playground CSS实现一个扇形
+@file App.vue
+
+```vue
+<template>
+  <div>
+    <div className="sector"></div>
+  </div>
+</template>
+<script setup>
+</script>
+<style>
 .sector {
   width: 0;
   height: 0;
@@ -16,17 +19,6 @@ App.__style__ = `
   border-top-color: red;
   border-radius: 50%;
 }
-`
+</style>
 ```
 :::
-
-
-```css
-.sector {
-  width: 0;
-  height: 0;
-  border: 100px solid transparent;
-  border-top-color: red;
-  border-radius: 50%;
-}
-```

@@ -1,7 +1,7 @@
 # 实现html-parser
 
 :::: tabs
-::: tab index.html
+@tab index.html
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -27,9 +27,9 @@
 </body>
 </html>
 ```
-:::
 
-::: tab index.js
+
+@tab index.js
 ```js
 /**
  * 
@@ -152,6 +152,5 @@ function compileToFunction(template) {
   console.log('%c 🍧 ast: ', 'font-size:20px;background-color: #42b983;color:#fff;', ast);
 }
 ```
-:::
 
 ::::

@@ -10,8 +10,8 @@
  */
 
 const path = require('path')
-const { defaultTheme } = require('@vuepress/theme-default')
 const sidebar = require('./sidebar').sidebar
+const { hopeTheme } = require('vuepress-theme-hope')
 module.exports = {
   title: 'fyhub’s blog',
   description: '博客',
@@ -19,10 +19,31 @@ module.exports = {
   base: '/',
   plugins: [
   ],
-  theme: defaultTheme({
+  theme: hopeTheme({
+    repo: "fyhhub/fyhhub.github.io",
+    repoLabel: "GitHub",
+    repoDisplay: true,
     lastUpdated: '最后更新时间',
     sidebar,
-    navbar: require('./sidebar').nav
+    navbar: require('./sidebar').nav,
+    themeColor: {
+      blue: "#2196f3",
+      red: "#f26d6d",
+      green: "#3eaf7c",
+      orange: "#fb9b5f",
+    },
+    plugins: {
+      comment: {
+        provider: 'Giscus',
+        repo: 'fyhhub/fyhhub.github.io',
+        repoId: 'R_kgDOGcGXUw',
+        category: 'General',
+        categoryId: 'DIC_kwDOGcGXU84CQ1aV'
+      },
+      mdEnhance: {
+        enableAll: true
+      }
+    }
   }),
   markdown: {
     lineNumbers: true
