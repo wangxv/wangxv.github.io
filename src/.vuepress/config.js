@@ -47,6 +47,7 @@ module.exports = {
         tasklist: true,
         playground: true,
         mermaid: true,
+        mark: true
       }
     }
   }),

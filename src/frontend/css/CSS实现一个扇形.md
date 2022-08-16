@@ -1,17 +1,12 @@
 # CSS实现一个扇形
+::: normal-demo CSS实现一个扇形
 
-::: playground CSS实现一个扇形
-@file App.vue
-
-```vue
-<template>
-  <div>
-    <div className="sector"></div>
-  </div>
-</template>
-<script setup>
-</script>
-<style>
+```html
+<div>
+  <div className="sector"></div>
+</div>
+```
+```css
 .sector {
   width: 0;
   height: 0;
@@ -19,6 +14,5 @@
   border-top-color: red;
   border-radius: 50%;
 }
-</style>
 ```
 :::
