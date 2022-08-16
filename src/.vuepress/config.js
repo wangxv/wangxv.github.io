@@ -63,7 +63,8 @@ module.exports = {
         playground: true,
         mermaid: true,
         mark: true
-      }
+      },
+      photoSwipe: true
     }
   }),
   markdown: {
