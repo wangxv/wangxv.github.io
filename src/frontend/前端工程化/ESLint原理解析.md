@@ -176,9 +176,9 @@ const config = {
 
 前者使用的是`espree`, 后者使用了`typescript`编译，并且`tslint`还实现了自己的一些`rule`。
 
-后来`tslint`就变成了`@typescript-eslint/parser`, 只需要指定一下代码的解析器，就可以实现`js`和`ts`的兼容。
+后来`tslint`的解析器就独立出来，成了`@typescript-eslint/parser`, 而它的规则一块合并到了`eslint`中，现在只需要指定一下代码的解析器，就可以实现`js`和`ts`的兼容。
 
-对于这么一行代码：
+我们来具体看下两者有何区别，对于这么一行代码：
 
 ```js
 let a = '1'
@@ -651,9 +651,10 @@ function parseForESLint(code, parserOptions) {
 
 + 自定义规则
 + processor
-+ 规则配置
++ 自定义配置
 
-本次我们将实现上述功能，来大家更加细节和具体的了解`eslint插件`。
+主要分为上面三部分，下面我们来详细看看
+
 ### eslint插件的基本结构
 
 直接以`eslint-plugin-vue`为例，可以看到它的配置如下
@@ -711,7 +712,7 @@ processors: {
 
 例如像上面的代码中，指定了`.vue`文件交给`./processor`中的方法去处理。
 
-后面会详细讲解一下如何实现`processor`。
+后面会详细讲解一下`processor`。
 
 #### environments
 插件可以暴露额外的环境以在 ESLint 中使用。为此，插件必须输出一个 `environments` 对象。`environments` 对象的 key 是不同环境提供的名字，值是不同环境的设置。
@@ -786,7 +787,7 @@ module.exports = {
 ```
 
 
-然后执行`npm link`将当前插件Link到全局
+然后执行`npm link`将当前插件Link到全局, 再在项目中`link`引入。
 ```
 // 插件项目中执行
 npm link
@@ -865,16 +866,35 @@ module.exports = {
 1. 错误提示：在`create`方法中，当遍历到`VariableDeclaration`节点时，`report`一个错误信息，`messageId`对应了上面`messages`的key, `data`中可以传递一些插槽。
 2. 代码修复：通过`getFirstToken`筛选到token等于`var`的，然后`replaceText`替换成`let`
 
+在上面的代码中，我们可以发现其中涉及了三个对象：
++ context
++ fixer
++ sourceCode
+
+它上面有哪些方法呢？这里我推荐直接看下[中文文档](https://cn.eslint.org/docs/developer-guide/working-with-rules)，不过我还是先列举几个，方便大家查看：
+
+`fixer`对象
+
+<img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bc340b3e5e0e4b74839789a92fd34e37~tplv-k3u1fbpfcp-watermark.image?" alt="" width="70%" />
+
+
+`SourceCode`对象
+
+<img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d77082c6580c47a5acdc923b9b8e90b4~tplv-k3u1fbpfcp-watermark.image?" alt="" width="70%" />
+
+
 接着我们测试下效果
 ```js
 ./node_modules/.bin/eslint ./test.js
 ```
 <img src="https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/919c1a02fae544e3ba7d8431c15c7cf4~tplv-k3u1fbpfcp-watermark.image?" alt="" width="70%" />
 
+再来执行以下`--fix`，可以发现`var`被修改成了`let`
+
 ```js
 ./node_modules/.bin/eslint ./test.js --fix
 ```
-会自动将`var`修改为`let`
+
 
 ### processor是什么?
 
@@ -893,7 +913,7 @@ processor: {
 
 `processor`的作用其实很简单，**就是在校验的前/后，分别对`code`和`messages`做一些处理**
 
-例如`eslint-plugin-vue`的`processor`实现就非常简单
+例如`eslint-plugin-vue`的`processor`实现就非常简单, code不需要处理，交给`vue-eslint-parser`去解析，而`postprocess`去单独处理了一下错误信息。
 ```js
 module.exports = {
   /** @param {string} code */
@@ -929,9 +949,29 @@ module.exports = {
 
 
 ## 九、ESLint源码
+
+简单画了一下源码的流程图，因为时间原因画的有些粗糙，大家见谅~
+
 <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4e14b2377f6b46e8934f8b2dd656de4f~tplv-k3u1fbpfcp-watermark.image?" alt="" width="100%" />
+
+大致列一下流程：
+1. 创建`ESLint`和`CLIEngine`类
+2. 提取配置文件，从当前目录搜索。
+3. 是否存在processor，存在就调用`preprocess`
+4. 根据传入的parser配置编译代码，生成AST
+5. 执行规则
+
+   + 遍历AST，平铺所有节点到`nodeQueue`
+   + 遍历rules, 注册节点事件(如 `Literal -> 上报错误、修复代码逻辑`..)
+   + 遍历平铺后的`nodeQueue`
+   + 触发节点事件，收集`问题和代码修复回调`
+6. 调用`postprocess`
+7. 执行代码修复
+8. 输出文件
 
 
 
 ## 参考
-
++ [Babel 插件通关秘籍](https://juejin.cn/book/6946117847848321055)
++ [TSLint 和 ESLint 是怎么融合在一起的](https://juejin.cn/post/7009657813890760741)
++ [Eslint 的 disable、enable 的注释配置是怎么实现的](https://juejin.cn/post/7010354638012547103)

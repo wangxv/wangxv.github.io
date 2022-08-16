@@ -3,7 +3,7 @@
 ::: normal-demo CSS画三角形
 ```html
 <div>
-  <div className="triangle"></div>
+  <div class="triangle"></div>
 </div>
 ```
 

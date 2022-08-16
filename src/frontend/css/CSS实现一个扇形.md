@@ -3,7 +3,7 @@
 
 ```html
 <div>
-  <div className="sector"></div>
+  <div class="sector"></div>
 </div>
 ```
 ```css
