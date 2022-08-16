@@ -990,7 +990,6 @@ npm i eslint-config-prettier eslint-plugin-prettier -D
 ```js
 {
   extends: [
-    "prettier" // prettier自带的一些规则配置
     "plugin:prettier/recommended" // 启动 prettier修复功能，必须！
   ],
   plugins: [
