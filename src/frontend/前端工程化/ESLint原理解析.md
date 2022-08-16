@@ -1,4 +1,8 @@
-# ESLint原理解析
+# 通关前端工程化（一）ESLint全方位解析，让你不再面向搜索引擎配置
+
+---
+theme: smartblue
+---
 
 ## 一、前言
 在前端工程化的工具链中，`eslint`在其中扮演了非常重要的角色，包含代码规范的检查和错误提示，还有代码的自动`fix`，让我们不再担心代码的基本质量。但是如果让你从头配置`eslint`，你可能会各种百度，google查询各种配置。还有面对`plugins`，`extends`的时候，可能会疑惑他俩到底有啥区别？为什么要这么配置？
@@ -970,6 +974,120 @@ module.exports = {
 8. 输出文件
 
 
+## 十、ESLint 与 Prettier 的强强联合
+ESLint作为规范你开发的工具，它在代码的静态分析方面是非常全面的。能给你非常良好的错误提示，但是在代码的自动格式化方面稍显不足，不够顺滑。
+
+所以搭配上`Prettier`这个代码自动格式化工具，开发起来将会非常舒适。
+
+下面讲解一下详细的配置。
+
+首先你需要安装一下两个插件
+```js
+npm i eslint-config-prettier eslint-plugin-prettier -D
+```
+
+然后在你的配置中`加入prettier`配置，注意不是替换你的配置
+```js
+{
+  extends: [
+    "prettier" // prettier自带的一些规则配置
+    "plugin:prettier/recommended" // 启动 prettier修复功能，必须！
+  ],
+  plugins: [
+    "prettier"
+  ]
+}
+```
+
+### eslint-plugin-prettier源码如此简单？
+通过前面的学习，相信大家对`eslint插件`已经非常了解了，我们随便来看看`eslint-plugin-prettier`是怎么实现的。
+
+```js
+module.exports = {
+  configs: {
+    recommended: {
+      extends: ['prettier'],
+      plugins: ['prettier'],
+      rules: {
+        'prettier/prettier': 'error',
+        'arrow-body-style': 'off',
+        'prefer-arrow-callback': 'off',
+      },
+    },
+  },
+  rules: {
+    prettier: {
+      meta: {
+        docs: {
+          url: 'https://github.com/prettier/eslint-plugin-prettier#options',
+        },
+        type: 'layout',
+        fixable: 'code',
+        schema: [
+          {
+            type: 'object',
+            properties: {},
+            additionalProperties: true,
+          },
+          {
+            type: 'object',
+            properties: {
+              usePrettierrc: { type: 'boolean' },
+              fileInfoOptions: {
+                type: 'object',
+                properties: {},
+                additionalProperties: true,
+              },
+            },
+            additionalProperties: true,
+          },
+        ],
+        messages: {
+          [INSERT]: 'Insert `{{ insertText }}`',
+          [DELETE]: 'Delete `{{ deleteText }}`',
+          [REPLACE]: 'Replace `{{ deleteText }}` with `{{ insertText }}`',
+        },
+      },
+      create(context) {
+        // ...其他
+        const source = sourceCode.text;
+
+        return {
+          Program() {
+            if (!prettier) {
+              prettier = require('prettier');
+            }
+            // ...其他逻辑
+            try {
+              prettierSource = prettier.format(source, prettierOptions);
+            } catch (err) {
+              if (!(err instanceof SyntaxError)) {
+                throw err;
+              }
+            }
+            // ... 其他逻辑
+          },
+        };
+      },
+    },
+  },
+};
+
+```
+
+我们可以看到，有两块代码，非常核心
+1. 实现了一个规则`prettier/prettier`, 并且它的`fixable`, 代表它是可以修复代码的。在`create`方法中，调用了`prettier.format`修复代码~
+2. 暴露出了`configs.recommended`推荐配置，默认开启`prettier/prettier: "error"`配置
+
+那`eslint-config-prettier`中又有什么呢？
+### eslint-config-prettier就这？
+
+可以看到配置了一大堆的默认规则。
+<img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1f199023073f4a9b8eb26544268a09db~tplv-k3u1fbpfcp-watermark.image?" alt="" width="100%" />
+
+大家可以想象为什么要单独配置一份，其实原因很简单，
+1. 格式化的时候可能存在`prettier`不支持的配置，例如`vue`文件的格式化。需要借助`vue`的规则。
+2. 可能会与其他格式化能力冲突，例如`semi`这个规则，`prettier`强制将它关闭了。
 
 ## 参考
 + [Babel 插件通关秘籍](https://juejin.cn/book/6946117847848321055)
