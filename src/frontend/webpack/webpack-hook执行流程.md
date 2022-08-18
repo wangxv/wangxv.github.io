@@ -1,109 +1,83 @@
-# Webpack hook执行流程
-
-
+# Webpack hook 执行流程
 
 ## environment call
 
-
-
 ## afterEnvironment call
-
-
 
 调用插件
 
-+ **WatchIgnorePlugin**
-
-
+- **WatchIgnorePlugin**
 
 ## entryOption call
 
-
-
 参数：
 
-+ context 工作目录
-+ entry：入口配置
+- context 工作目录
+- entry：入口配置
 
 调用插件
 
-+ **EntryOptionPlugin**
-
-
+- **EntryOptionPlugin**
 
 ## afterPlugins call
 
 参数：
 
-+ compiler
-
-
+- compiler
 
 ## afterResolvers call
 
 参数：
 
-+ compiler
+- compiler
 
 调用插件
 
-+ AMDPlugin
-
-
+- AMDPlugin
 
 ## beforeRun callAsync
 
 参数：
 
-+ compiler
+- compiler
 
 调用插件
 
-+ NodeEnvironmentPlugin
-
-
+- NodeEnvironmentPlugin
 
 ## run callAsync
 
 参数：
 
-+ compiler
+- compiler
 
 调用插件
 
-+ CachePlugin
-
-
-
-
+- CachePlugin
 
 ## normalModuleFactory call
 
 参数：
 
-+ normalModuleFactory
+- normalModuleFactory
 
 调用插件：
 
-+ IgnorePlugin
-+ NormalModuleReplacementPlugin
-+ SideEffectsFlagPlugin
-
-
+- IgnorePlugin
+- NormalModuleReplacementPlugin
+- SideEffectsFlagPlugin
 
 ## contextModuleFactory call
 
 参数：
 
-+ contextModuleFactory
+- contextModuleFactory
 
 调用插件
 
-+ ContextExclusionPlugin
-+ ContextReplacementPlugin
-+ IgnorePlugin
-
-
+- ContextExclusionPlugin
+- ContextReplacementPlugin
+- IgnorePlugin
 
 ## beforeCompile call
 
@@ -117,13 +91,9 @@
 }
 ```
 
-
-
 调用插件
 
-+ DllReferencePlugin
-
-
+- DllReferencePlugin
 
 ## compile call
 
@@ -139,19 +109,17 @@
 
 调用插件
 
-+ DelegatedPlugin
-+ DllReferencePlugin
-+ ExternalsPlugin
-
-
+- DelegatedPlugin
+- DllReferencePlugin
+- ExternalsPlugin
 
 ## thisCompilation call
 
 参数
 
-+ compilation
+- compilation
 
-+ params
+- params
 
   ```
   {
@@ -163,28 +131,26 @@
 
 调用插件
 
-+ EnvironmentPlugin
-+ LibraryTemplatePlugin
-+ WarnNoModeSetPlugin
-+ NodeTemplatePlugin
-+ ReadFileCompileWasmTemplatePlugin
-+ AggressiveMergingPlugin
-+ AggressiveSplittingPlugin
-+ RuntimeChunkPlugin
-+ SplitChunksPlugin
-+ FetchCompileWasmTemplatePlugin
-+ JsonpTemplatePlugin
-+ WebWorkerTemplatePlugin
-
-
+- EnvironmentPlugin
+- LibraryTemplatePlugin
+- WarnNoModeSetPlugin
+- NodeTemplatePlugin
+- ReadFileCompileWasmTemplatePlugin
+- AggressiveMergingPlugin
+- AggressiveSplittingPlugin
+- RuntimeChunkPlugin
+- SplitChunksPlugin
+- FetchCompileWasmTemplatePlugin
+- JsonpTemplatePlugin
+- WebWorkerTemplatePlugin
 
 ## compilation call
 
 参数
 
-+ compilation
+- compilation
 
-+ params
+- params
 
   ```
   {
@@ -196,115 +162,103 @@
 
 调用插件
 
-+ APIPlugin
-+ AutomaticPrefetchPlugin
-+ BannerPlugin
-+ CommonJsStuffPlugin
-+ CompatibilityPlugin
-+ ConstPlugin
-+ DefinePlugin
-+ DelegatedPlugin
-+ DllEntryPlugin
-+ DllReferencePlugin
-+ DynamicEntryPlugin
-+ EvalDevToolModulePlugin
-+ EvalSourceMapDevToolPlugin
-+ ExtendedAPIPlugin
-+ FlagAllModulesAsUsedPlugin
-+ FlagDependencyExportsPlugin
-+ FlagDependencyUsagePlugin
-+ FlagInitialModulesAsUsedPlugin
-+ FunctionModulePlugin
-+ HashedModuleIdsPlugin
-+ HotModuleReplacementPlugin
-+ JavascriptModulesPlugin
-+ JsonModulesPlugin
-+ LoaderOptionsPlugin
-+ LoaderTargetPlugin
-+ MultiEntryPlugin
-+ NamedChunksPlugin
-+ NamedModulesPlugin
-+ NodeStuffPlugin
-+ NoEmitOnErrorsPlugin
-+ PrefetchPlugin
-+ ProgressPlugin
-+ ProvidePlugin
-+ RecordIdsPlugin
-+ RequireJsStuffPlugin
-+ SingleEntryPlugin
-+ SourceMapDevToolPlugin
-+ TemplatedPathPlugin
-+ UseStrictPlugin
-+ WarnCaseSensitiveModulesPlugin
-+ ProfilingPlugin
-+ AMDPlugin
-+ CommonJsPlugin
-+ HarmonyModulesPlugin
-+ ImportPlugin
-+ LoaderPlugin
-+ RequireContextPlugin
-+ RequireEnsurePlugin
-+ RequireIncludePlugin
-+ SystemPlugin
-+ NodeSourcePlugin
-+ ChunkModuleIdRangePlugin
-+ EnsureChunkConditionsPlugin
-+ FlagIncludedChunksPlugin
-+ LimitChunkCountPlugin
-+ MergeDuplicateChunksPlugin
-+ MinChunkSizePlugin
-+ ModuleConcatenationPlugin
-+ NaturalChunkOrderPlugin
-+ OccurrenceOrderChunkIdsPlugin
-+ OccurrenceOrderModuleIdsPlugin
-+ OccurrenceOrderPlugin
-+ RemoveEmptyChunksPlugin
-+ RemoveParentModulesPlugin
-+ SideEffectsFlagPlugin
-+ WasmFinalizeExportsPlugin
-+ WebAssemblyModulesPlugin
-+ TerserPlugin
-
-
-
-
+- APIPlugin
+- AutomaticPrefetchPlugin
+- BannerPlugin
+- CommonJsStuffPlugin
+- CompatibilityPlugin
+- ConstPlugin
+- DefinePlugin
+- DelegatedPlugin
+- DllEntryPlugin
+- DllReferencePlugin
+- DynamicEntryPlugin
+- EvalDevToolModulePlugin
+- EvalSourceMapDevToolPlugin
+- ExtendedAPIPlugin
+- FlagAllModulesAsUsedPlugin
+- FlagDependencyExportsPlugin
+- FlagDependencyUsagePlugin
+- FlagInitialModulesAsUsedPlugin
+- FunctionModulePlugin
+- HashedModuleIdsPlugin
+- HotModuleReplacementPlugin
+- JavascriptModulesPlugin
+- JsonModulesPlugin
+- LoaderOptionsPlugin
+- LoaderTargetPlugin
+- MultiEntryPlugin
+- NamedChunksPlugin
+- NamedModulesPlugin
+- NodeStuffPlugin
+- NoEmitOnErrorsPlugin
+- PrefetchPlugin
+- ProgressPlugin
+- ProvidePlugin
+- RecordIdsPlugin
+- RequireJsStuffPlugin
+- SingleEntryPlugin
+- SourceMapDevToolPlugin
+- TemplatedPathPlugin
+- UseStrictPlugin
+- WarnCaseSensitiveModulesPlugin
+- ProfilingPlugin
+- AMDPlugin
+- CommonJsPlugin
+- HarmonyModulesPlugin
+- ImportPlugin
+- LoaderPlugin
+- RequireContextPlugin
+- RequireEnsurePlugin
+- RequireIncludePlugin
+- SystemPlugin
+- NodeSourcePlugin
+- ChunkModuleIdRangePlugin
+- EnsureChunkConditionsPlugin
+- FlagIncludedChunksPlugin
+- LimitChunkCountPlugin
+- MergeDuplicateChunksPlugin
+- MinChunkSizePlugin
+- ModuleConcatenationPlugin
+- NaturalChunkOrderPlugin
+- OccurrenceOrderChunkIdsPlugin
+- OccurrenceOrderModuleIdsPlugin
+- OccurrenceOrderPlugin
+- RemoveEmptyChunksPlugin
+- RemoveParentModulesPlugin
+- SideEffectsFlagPlugin
+- WasmFinalizeExportsPlugin
+- WebAssemblyModulesPlugin
+- TerserPlugin
 
 ## make call
 
 参数
 
-+ compilation
+- compilation
 
 调用插件
 
-+ AutomaticPrefetchPlugin
-+ DllEntryPlugin
-+ DynamicEntryPlugin
-+ MultiEntryPlugin
-+ PrefetchPlugin
-+ SingleEntryPlugin （主流程）
-
-
-
-
+- AutomaticPrefetchPlugin
+- DllEntryPlugin
+- DynamicEntryPlugin
+- MultiEntryPlugin
+- PrefetchPlugin
+- SingleEntryPlugin （主流程）
 
 ## compilation.addEntry call
 
 参数
 
-+ entry
+- entry
 
   SingleEntryDependency 对象
 
-+ name
-
-
+- name
 
 调用插件
 
-+ ProgressPlugin
-
-
+- ProgressPlugin
 
 ## normalModuleFactory.beforeResolve callAsync
 
@@ -323,17 +277,11 @@
 }
 ```
 
-
-
 调用插件
 
-+ ContextReplacementPlugin
-+ IgnorePlugin
-+ NormalModuleReplacementPlugin
-
-
-
-
+- ContextReplacementPlugin
+- IgnorePlugin
+- NormalModuleReplacementPlugin
 
 ## normalModuleFactory.factory call
 
@@ -341,11 +289,9 @@
 
 调用插件
 
-+ DelegatedModuleFactoryPlugin
-+ ExternalModuleFactoryPlugin
-+ NormalModuleFactory的构造函数中被tap（主流程）
-
-
+- DelegatedModuleFactoryPlugin
+- ExternalModuleFactoryPlugin
+- NormalModuleFactory 的构造函数中被 tap（主流程）
 
 ## normalModuleFactory.resolver call
 
@@ -353,89 +299,71 @@
 
 调用插件
 
-+ NormalModuleFactory的构造函数中被tap（主流程）
-
-
+- NormalModuleFactory 的构造函数中被 tap（主流程）
 
 ## normalModuleFactory.createParser.for call
 
 参数
 
-+ parserOptions
-
-
+- parserOptions
 
 调用插件
 
-+ JavascriptModulesPlugin
-+ JsonModulesPlugin
-+ WebAssemblyModulesPlugin
-
-
+- JavascriptModulesPlugin
+- JsonModulesPlugin
+- WebAssemblyModulesPlugin
 
 ## normalModuleFactory.parser.for call
 
 参数
 
-+ parser
-+ parserOptions
+- parser
+- parserOptions
 
 调用参数
 
-+ APIPlugin
-+ CommonJsStuffPlugin
-+ CompatibilityPlugin
-+ ConstPlugin
-+ DefinePlugin
-+ ExtendedAPIPlugin
-+ NodeStuffPlugin
-+ ProvidePlugin
-+ RequireJsStuffPlugin
-+ UseStrictPlugin
-+ ProfilingPlugin
-+ AMDPlugin
-+ CommonJsPlugin
-+ HarmonyModulesPlugin
-+ ImportPlugin
-+ RequireEnsurePlugin
-+ RequireIncludePlugin
-+ SystemPlugin
-+ NodeSourcePlugin
-+ ModuleConcatenationPlugin
-
-
-
-
+- APIPlugin
+- CommonJsStuffPlugin
+- CompatibilityPlugin
+- ConstPlugin
+- DefinePlugin
+- ExtendedAPIPlugin
+- NodeStuffPlugin
+- ProvidePlugin
+- RequireJsStuffPlugin
+- UseStrictPlugin
+- ProfilingPlugin
+- AMDPlugin
+- CommonJsPlugin
+- HarmonyModulesPlugin
+- ImportPlugin
+- RequireEnsurePlugin
+- RequireIncludePlugin
+- SystemPlugin
+- NodeSourcePlugin
+- ModuleConcatenationPlugin
 
 ## normalModuleFactory.createGenerator.for call
 
 参数
 
-+ generator
-+ generatorOptions
+- generator
+- generatorOptions
 
 调用插件
 
-+ JavascriptModulesPlugin
-+ JsonModulesPlugin
-+ WebAssemblyModulesPlugin
-
-
+- JavascriptModulesPlugin
+- JsonModulesPlugin
+- WebAssemblyModulesPlugin
 
 ## normalModuleFactory.generator.for call
 
 参数
 
-+ generator
-+ generatorOptions
-
-
+- generator
+- generatorOptions
 
 调用插件：无
-
-
-
-
 
 ## normalModuleFactory.afterResolve callAsync
 
@@ -446,7 +374,7 @@
   context: context,  // 文件所在目录
   request: loaders
   dependencies: data.dependencies, // 文件的依赖类型
-  userRequest, // 当前文件完整路径 
+  userRequest, // 当前文件完整路径
   rawRequest: request, // 相对路径，例如import xx from './xxx'  这里就是./xxx
   loaders,
   resource, // 文件完整路径
@@ -459,7 +387,7 @@
   type: 'javascript/auto',
   parser: this.getParser(type, settings.parser),
   generator: this.getGenerator(type, settings.generator),
-  resolveOptions // 
+  resolveOptions //
 }
 ```
 
@@ -483,14 +411,10 @@ resourceResolveData
 }
 ```
 
-
-
 调用插件
 
-+ ContextReplacementPlugin
-+ NormalModuleReplacementPlugin
-
-
+- ContextReplacementPlugin
+- NormalModuleReplacementPlugin
 
 ## normalModuleFactory.createModule call
 
@@ -498,147 +422,118 @@ resourceResolveData
 
 调用插件: 无
 
-
-
 ## normalModuleFactory.module call
 
 参数
 
-+ module
-+ 同上
+- module
+- 同上
 
 调用插件
 
-+ DelegatedModuleFactoryPlugin
-+ EvalDevToolModuleTemplatePlugin
-+ EvalSourceMapDevToolModuleTemplatePlugin
-+ SideEffectsFlagPlugin
-
-
+- DelegatedModuleFactoryPlugin
+- EvalDevToolModuleTemplatePlugin
+- EvalSourceMapDevToolModuleTemplatePlugin
+- SideEffectsFlagPlugin
 
 ## compilation.buildModule call
 
 参数
 
-+ module
+- module
 
 调用插件
 
-+ ProgressPlugin
-+ SourceMapDevToolModuleOptionsPlugin
-+ TerserPlugin
-
-
+- ProgressPlugin
+- SourceMapDevToolModuleOptionsPlugin
+- TerserPlugin
 
 ## compilation.normalModuleLoader call
 
 参数
 
-+ loaderContext
+- loaderContext
 
   ```javascript
   const loaderContext = {
-  			version: 2,
-  			emitWarning: warning => {
-  			},
-  			emitError: error => {
-  			},
-  			getLogger: name => {
-  			},
-  			// TODO remove in webpack 5
-  			exec: (code, filename) => {
-  			},
-  			resolve(context, request, callback) {
-  			},
-  			getResolve(options) {
-  			},
-  			emitFile: (name, content, sourceMap, assetInfo) => {
-  			},
-  			rootContext: options.context,
-  			webpack: true,
-  			sourceMap: !!this.useSourceMap,
-  			mode: options.mode || "production",
-  			_module: this,
-  			_compilation: compilation,
-  			_compiler: compilation.compiler,
-  			fs: fs
-  		}
+    version: 2,
+    emitWarning: (warning) => {},
+    emitError: (error) => {},
+    getLogger: (name) => {},
+    // TODO remove in webpack 5
+    exec: (code, filename) => {},
+    resolve(context, request, callback) {},
+    getResolve(options) {},
+    emitFile: (name, content, sourceMap, assetInfo) => {},
+    rootContext: options.context,
+    webpack: true,
+    sourceMap: !!this.useSourceMap,
+    mode: options.mode || "production",
+    _module: this,
+    _compilation: compilation,
+    _compiler: compilation.compiler,
+    fs: fs,
+  };
   ```
 
 调用插件
 
-+ HotModuleReplacementPlugin
-+ LoaderOptionsPlugin
-+ LoaderTargetPlugin
-+ LoaderPlugin
-
-
-
-
+- HotModuleReplacementPlugin
+- LoaderOptionsPlugin
+- LoaderTargetPlugin
+- LoaderPlugin
 
 ## parser.program call
 
 参数
 
-+ ast
-+ comments
+- ast
+- comments
 
 调用插件
 
-+ UseStrictPlugin
-+ HarmonyDetectionParserPlugin
-
-
+- UseStrictPlugin
+- HarmonyDetectionParserPlugin
 
 ## parser.xxx call
 
 参数
 
-+ ast
-
-
-
-
+- ast
 
 ## compilation.succeedModule call
 
 参数
 
-+ module
+- module
 
 调用插件
 
-+ ProgressPlugin
-
-
+- ProgressPlugin
 
 ## compilation.succeedEntry call
 
 参数
 
-+ entry
-+ name
-+ module
-
-
+- entry
+- name
+- module
 
 ## compilation.finishModules callAsync
 
 参数
 
-+ modules
+- modules
 
 调用插件
 
-+ FlagDependencyExportsPlugin
+- FlagDependencyExportsPlugin
 
   遍历所有 `module` 将 `export` 出来的变量以数组的形式，单独存储到 `module.buildMeta.providedExports`变量下。
 
-+ WasmFinalizeExportsPlugin
+- WasmFinalizeExportsPlugin
 
-+ ProgressPlugin
-
-
+- ProgressPlugin
 
 ## compilation.seal call
 
@@ -646,57 +541,43 @@ resourceResolveData
 
 调用插件
 
-+ WarnCaseSensitiveModulesPlugin
-
-
+- WarnCaseSensitiveModulesPlugin
 
 ## compilation.optimizeDependenciesBasic call
 
 参数
 
-+ modules
+- modules
 
 调用插件：无
-
-
 
 ## compilation.optimizeDependencies call
 
 参数
 
-+ modules
+- modules
 
 调用插件
 
-+ FlagAllModulesAsUsedPlugin
-+ FlagDependencyUsagePlugin
-+ SideEffectsFlagPlugin
-
-
-
-
+- FlagAllModulesAsUsedPlugin
+- FlagDependencyUsagePlugin
+- SideEffectsFlagPlugin
 
 ## compilation.optimizeDependenciesAdvanced call
 
 参数
 
-+ modules
+- modules
 
 调用插件：无
-
-
-
-
 
 ## compilation.afterOptimizeDependencies call
 
 参数
 
-+ modules
+- modules
 
 调用插件
-
-
 
 ## compilation.beforeChunks call
 

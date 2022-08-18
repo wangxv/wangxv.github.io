@@ -18,9 +18,8 @@
  * @param {number} val
  * @return {TreeNode}
  */
-var searchBST = function(root, val) {
-  if (!root || root.val === val) return root
-  return searchBST(val > root.val ? root.right : root.left, val)
+var searchBST = function (root, val) {
+  if (!root || root.val === val) return root;
+  return searchBST(val > root.val ? root.right : root.left, val);
 };
 // @lc code=end
-

@@ -1,83 +1,89 @@
-# rollup源码之plugin编写指南
-## 目录
-[[toc]]
-## 前言
-rollup作为一款轻量的打包编译工具，在我们日常的工具库开发中使用非常广泛，但是对于它的插件编写，从目前来看官网上对于插件的介绍几乎都是英文，学习起来也不是很友好, 例子也相对较少，所以整理一篇文章来学习也是不错的。除此之外，作为使用最广泛的webpack，它的插件编写也比较简单和清晰的，那它和rollup中的插件使用又有什么区别呢。下面将借助流程图 并搭配一些rollup源码来讲解。
+# rollup 源码之 plugin 编写指南
 
+## 目录
+
+[[toc]]
+
+## 前言
+
+rollup 作为一款轻量的打包编译工具，在我们日常的工具库开发中使用非常广泛，但是对于它的插件编写，从目前来看官网上对于插件的介绍几乎都是英文，学习起来也不是很友好, 例子也相对较少，所以整理一篇文章来学习也是不错的。除此之外，作为使用最广泛的 webpack，它的插件编写也比较简单和清晰的，那它和 rollup 中的插件使用又有什么区别呢。下面将借助流程图 并搭配一些 rollup 源码来讲解。
 
 ## 插件执行
-我们知道`wepback`执行插件是借助了`tapable`用于同步串行、并行，异步串行并行等方式来执行插件，那rollup其实自己实现一套简易的类似`tapable`的功能。大家可以定位到源码中`src/utils/PluginDriver.ts`文件。
+
+我们知道`wepback`执行插件是借助了`tapable`用于同步串行、并行，异步串行并行等方式来执行插件，那 rollup 其实自己实现一套简易的类似`tapable`的功能。大家可以定位到源码中`src/utils/PluginDriver.ts`文件。
 
 ```js
 class PluginDriver {
-    hookFirst() {
-        // ...
-    }
-    hookFirstSync() {
-        // ...
-    }
-    hookParallel() {
-        // ...
-    }
-    hookReduceArg0() {
-        // ...
-    }
-    hookReduceArg0Sync() {
-        // ...
-    }
-    hookReduceValue() {
-        // ...
-    }
-    hookReduceValueSync() {
-        // ...
-    }
-    hookSeqSync() {
-        // ...
-    }
+  hookFirst() {
+    // ...
+  }
+  hookFirstSync() {
+    // ...
+  }
+  hookParallel() {
+    // ...
+  }
+  hookReduceArg0() {
+    // ...
+  }
+  hookReduceArg0Sync() {
+    // ...
+  }
+  hookReduceValue() {
+    // ...
+  }
+  hookReduceValueSync() {
+    // ...
+  }
+  hookSeqSync() {
+    // ...
+  }
 }
 ```
 
 下面分别介绍这些方法，都有什么作用，相信大家都通过方法名看出了具体作用了~
 
-+ **hookFirst**: 异步串行，出现第一个返回值不为空的插件，就停止执行,类似`tapable`的`AsyncSeriesBailHook`
+- **hookFirst**: 异步串行，出现第一个返回值不为空的插件，就停止执行,类似`tapable`的`AsyncSeriesBailHook`
 
-+ **hookFirstSync**: 同步串行，出现第一个返回值不为空的插件，就停止执行，类似`tapable`的`SyncBailHook`
+- **hookFirstSync**: 同步串行，出现第一个返回值不为空的插件，就停止执行，类似`tapable`的`SyncBailHook`
 
-+ **hookParallel**： 异步并行 Promise.all，类似`tapable`的`AsyncParallelHook`
+- **hookParallel**： 异步并行 Promise.all，类似`tapable`的`AsyncParallelHook`
 
-+ **hookReduceArg0**: 异步串行，把上一个hook的返回值作为下一个hook的参数，如果返回为空就停止执行，并返回最后的值, 类似`tapable`的`AsyncSeriesWaterfallHook`
+- **hookReduceArg0**: 异步串行，把上一个 hook 的返回值作为下一个 hook 的参数，如果返回为空就停止执行，并返回最后的值, 类似`tapable`的`AsyncSeriesWaterfallHook`
 
-+ **hookReduceArg0Sync**：同步串行，把上一个hook的返回值作为下一个hook的参数，如果返回为空就停止执行，并返回最后的值, 类似`tapable`的`SyncWaterfallHook`
+- **hookReduceArg0Sync**：同步串行，把上一个 hook 的返回值作为下一个 hook 的参数，如果返回为空就停止执行，并返回最后的值, 类似`tapable`的`SyncWaterfallHook`
 
-+ **hookReduceValue**: 异步串行，传入一个初始值value，上一个hook处理好value后的返回值作为下一个hook的参数
+- **hookReduceValue**: 异步串行，传入一个初始值 value，上一个 hook 处理好 value 后的返回值作为下一个 hook 的参数
 
-+ **hookReduceValueSync**: 同步串行，传入一个初始值value，上一个hook处理好value后的返回值作为下一个hook的参数
+- **hookReduceValueSync**: 同步串行，传入一个初始值 value，上一个 hook 处理好 value 后的返回值作为下一个 hook 的参数
 
-+ **hookSeq**: 异步串行，忽略返回值，类似`tapable`的`SyncHook`
-+ **hookSeqSync**: 同步串行，忽略返回值类似`tapable`的`AsyncSeriesHook`
+- **hookSeq**: 异步串行，忽略返回值，类似`tapable`的`SyncHook`
+- **hookSeqSync**: 同步串行，忽略返回值类似`tapable`的`AsyncSeriesHook`
 
-通过上面的介绍，大家听过大概知道了rollup的插件是如何执行的。
+通过上面的介绍，大家听过大概知道了 rollup 的插件是如何执行的。
 
 ## 示例
+
 我们先从一段代码开始
+
 ```js
-const rollup = require('rollup');
-const path = require('path')
+const rollup = require("rollup");
+const path = require("path");
 const inputOptions = {
-  input: './src/app.js'
-}
+  input: "./src/app.js",
+};
 const outputOptions = {
-  file: 'bundle.js',
-  format: 'cjs'
-}
+  file: "bundle.js",
+  format: "cjs",
+};
 
 async function build() {
   // 第一步
   const bundle = await rollup.rollup(inputOptions);
-  
+
   // 第二步
   const { code, map } = await bundle.generate(outputOptions);
-  
+
   // 第三步
   await bundle.write(outputOptions);
 }
@@ -85,14 +91,13 @@ async function build() {
 build();
 ```
 
-
-## 1. build阶段
-
+## 1. build 阶段
 
 ### options Hook
+
 ```mermaid
 graph TD
-开始 --> 
+开始 -->
 获取inputOptions -->
 获取插件数组 --> |异步串行|a(options Hook) -->
 经过插件处理后的inputOptions -->
@@ -101,14 +106,16 @@ graph TD
 style a fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
 
-> 注意：options hook会被异步串行执行
+> 注意：options hook 会被异步串行执行
 
 **插件示例**
 
 参数：inputOptions
 
 上下文：
-+ meta: { rollupVersion, watchMode }
+
+- meta: { rollupVersion, watchMode }
+
 ```js
 {
     name: 'options hook',
@@ -134,15 +141,18 @@ e --> |hookParallel 异步并行|f(buildStart Hook) --> g(graph.build)
 
 style f fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
+
 可以看到在要执行`graph.build`之前，除了创建一些重要对象之外，还执行了`buildStart Hook`
+
 ```js
-graph.pluginDriver.hookParallel('buildStart', [inputOptions])
+graph.pluginDriver.hookParallel("buildStart", [inputOptions]);
 ```
 
 **插件示例**
 
-参数：`inputOptions` 
-> 注意这里的inputOptions是经过合并处理过后的
+参数：`inputOptions`
+
+> 注意这里的 inputOptions 是经过合并处理过后的
 
 ```js
 {
@@ -154,8 +164,8 @@ graph.pluginDriver.hookParallel('buildStart', [inputOptions])
 }
 ```
 
-
 ### resolveId Hook
+
 下面进入解析入口文件路径阶段
 
 ```mermaid
@@ -169,21 +179,24 @@ normalizeEntryModules -->
 
 style b fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
-经过rollup内部的路径处理和`resolveId Hook`的处理，我们拿到了完整的入口文件路径。
+
+经过 rollup 内部的路径处理和`resolveId Hook`的处理，我们拿到了完整的入口文件路径。
+
 ```js
 const pluginResult = await pluginDriver.hookFirst(
-    'resolveId',
-    [source, importer, { custom: customOptions }],
-    null,
-    skip
+  "resolveId",
+  [source, importer, { custom: customOptions }],
+  null,
+  skip
 );
 ```
 
 **插件示例**
 
 参数：
-+ id 文件路径
-+ importer 可指定当前解析目录
+
+- id 文件路径
+- importer 可指定当前解析目录
 
 ```js
 // 乞丐版的alias插件
@@ -210,8 +223,8 @@ const pluginResult = await pluginDriver.hookFirst(
   }
 }
 ```
-`resolveId Hook`也是比较常用的hook，需要注意的是，如果有插件返回了值，那么后续所有插件的`resolveId`都不会被执行。
 
+`resolveId Hook`也是比较常用的 hook，需要注意的是，如果有插件返回了值，那么后续所有插件的`resolveId`都不会被执行。
 
 ### load Hook
 
@@ -231,12 +244,14 @@ end
 
 style c fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
-拿到上一个`resolveId hook`处理的路径后，就要进入读取入口文件的步骤了，这一步rollup给了我们很大权力，我们可以任意修改文件内容。但是要注意，每个文件只会被一个插件的`load Hook`处理，因为它是以`hookFirst`来执行的。另外，如果你没有返回值，rollup会自动读取文件。
+
+拿到上一个`resolveId hook`处理的路径后，就要进入读取入口文件的步骤了，这一步 rollup 给了我们很大权力，我们可以任意修改文件内容。但是要注意，每个文件只会被一个插件的`load Hook`处理，因为它是以`hookFirst`来执行的。另外，如果你没有返回值，rollup 会自动读取文件。
 
 **插件示例**
 
 参数：
-+ id 文件完整路径
+
+- id 文件完整路径
 
 ```js
 // 在所有文件前面添加注释
@@ -255,9 +270,9 @@ style c fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
   load(id) {
     // 读取文件内容
     const content = fs.readFileSync(id);
-    
+
     // 也可以对代码进行转换 生成等操作
-    transform(content) 
+    transform(content)
     generate()
     return {
         code: '/*这是一段注释*/' + content.toString()
@@ -265,7 +280,6 @@ style c fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
   }
 }
 ```
-
 
 ### transform Hook
 
@@ -276,13 +290,15 @@ b(ast,map,code)
 
 style a fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
-关于这个Hook想必大家都猜到了，可以对代码进行转换。关于这块的代码示例简单介绍就可以了~，大家自行发挥~。
+
+关于这个 Hook 想必大家都猜到了，可以对代码进行转换。关于这块的代码示例简单介绍就可以了~，大家自行发挥~。
 
 **插件示例**
 
 参数
-+ code
-+ id
+
+- code
+- id
 
 ```js
 // 写法1
@@ -321,10 +337,10 @@ i(创建根ast节点new Program) -->
 递归整个ast树并创建每个节点
 
 ```
-上面的步骤其实递归了整个ast树，并为每个类型节点都创建了对应的`节点类`，对于它内部做了什么，本文不做讨论。
+
+上面的步骤其实递归了整个 ast 树，并为每个类型节点都创建了对应的`节点类`，对于它内部做了什么，本文不做讨论。
 
 ![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6c33f6f9b5f3415cbad05acadf1c09ad~tplv-k3u1fbpfcp-watermark.image)
-
 
 ### moduleParsed Hook
 
@@ -334,15 +350,18 @@ addModuleSource --> |hookParallel 异步并行|a(moduleParsed Hook)
 
 style a fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
-在解析完模块后，我们能通过这个hook来获取模块的信息
+
+在解析完模块后，我们能通过这个 hook 来获取模块的信息
+
 ```js
-this.pluginDriver.hookParallel('moduleParsed', [module.info]);
+this.pluginDriver.hookParallel("moduleParsed", [module.info]);
 ```
 
 **插件示例**
 
 参数
-+ module.info 模块信息
+
+- module.info 模块信息
 
 ```js
 {
@@ -371,8 +390,8 @@ this.pluginDriver.hookParallel('moduleParsed', [module.info]);
   }
 }
 ```
-获取到模块信息之后，`rollup`将会根据模块的依赖树递归，重复以上的步骤，过程如下
 
+获取到模块信息之后，`rollup`将会根据模块的依赖树递归，重复以上的步骤，过程如下
 
 ```mermaid
 graph TD
@@ -390,12 +409,12 @@ style a fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 style f fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 ```
 
-
-## 2.generate阶段
+## 2.generate 阶段
 
 > 时间原因，流程图后续补充
 
 ### renderStart、banner、footer、intro、outro Hook
+
 ```mermaid
 graph TD
 bundle(new Bundle) -->
@@ -417,9 +436,10 @@ style a fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 
 **插件示例**
 
-+ **renderStart**
+- **renderStart**
 
   参数：inputOptions, outputOptions
+
   ```js
   {
       name: 'renderStart',
@@ -429,25 +449,26 @@ style a fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
       }
    }
   ```
-  
- + **banner、footer、intro、outro Hook**
- ```js
- const outputOptions = {
-     banner: 'banner',
-     footer: 'footer',
-     intro: () => 'intro',
-     outro: 'outro'
- }
- ```
- 
- 在创建完chunk后，就会进入chunk的优化渲染阶段了，做的事情其实也比较简单，就是调用了所有ast节点的`render`方法，然后会把`included`为false的节点代码删除，也就是我们常说的`tree shaking`。
 
+- **banner、footer、intro、outro Hook**
+
+```js
+const outputOptions = {
+  banner: "banner",
+  footer: "footer",
+  intro: () => "intro",
+  outro: "outro",
+};
+```
+
+在创建完 chunk 后，就会进入 chunk 的优化渲染阶段了，做的事情其实也比较简单，就是调用了所有 ast 节点的`render`方法，然后会把`included`为 false 的节点代码删除，也就是我们常说的`tree shaking`。
 
 ### renderDynamicImport
 
 **插件示例**
 
 参数：
+
 ```
 {
     customResolution: string | null
@@ -457,26 +478,24 @@ style a fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
 }
 ```
 
-
 ```js
 // plugin
 const plugin = {
-  name: 'dynamic-import-polyfill',
+  name: "dynamic-import-polyfill",
   renderDynamicImport() {
     return {
-      left: 'dynamicImportPolyfill(',
-      right: ', import.meta.url)'
-    }
-  }
+      left: "dynamicImportPolyfill(",
+      right: ", import.meta.url)",
+    };
+  },
 };
 
 // input
-import('./lib.js');
+import("./lib.js");
 
 // output
-dynamicImportPolyfill('./lib.js', import.meta.url);
+dynamicImportPolyfill("./lib.js", import.meta.url);
 ```
-
 
 ### augmentChunkHash
 
@@ -528,15 +547,15 @@ dynamicImportPolyfill('./lib.js', import.meta.url);
 ### resolveImportMeta
 
 参数：
-+ property `meta.xxx`
-+ 模块和chunk id
-    ```js
-    {
-        chunkId,
-        moduleId,
-        format
-    }
-    ```
+
+- property `meta.xxx`
+- 模块和 chunk id
+  ```js
+  {
+    chunkId, moduleId, format;
+  }
+  ```
+
 ```js
 // a.js
 console.log(import.meta.testKey)
@@ -553,20 +572,15 @@ console.log(import.meta.testKey)
 }
 ```
 
-
 ### resolveFileUrl
 
 **插件示例**
 
 参数：
+
 ```js
 {
-    chunkId,
-    fileName,
-    format,
-    moduleId,
-    referenceId,
-    relativePath
+  chunkId, fileName, format, moduleId, referenceId, relativePath;
 }
 ```
 
@@ -579,17 +593,17 @@ console.log(import.meta.testKey)
 }
 ```
 
-
 ### renderChunk
 
 **插件示例**
 
 参数：
+
 ```js
 {
-    code,  // chunk代码
-    chunk,  // chunk的一些信息
-    options  // outputOptions
+  code, // chunk代码
+    chunk, // chunk的一些信息
+    options; // outputOptions
 }
 ```
 
@@ -616,51 +630,52 @@ console.log(import.meta.testKey)
 }
 ```
 
-
 ### generateBundle
 
 **插件示例**
 
 参数：
-+ outputOptions
-+ ChunkInfo or AssetInfo
-    ```js
-    // AssetInfo
-    moduleId: {
-      fileName: string,
-      name?: string,
-      source: string | Uint8Array,
-      type: 'asset',
-    }
 
-    // ChunkInfo
-    moduleId: {
-      code: string,
-      dynamicImports: string[],
-      exports: string[],
-      facadeModuleId: string | null,
-      fileName: string,
-      implicitlyLoadedBefore: string[],
-      imports: string[],
-      importedBindings: {[imported: string]: string[]},
-      isDynamicEntry: boolean,
-      isEntry: boolean,
-      isImplicitEntry: boolean,
-      map: SourceMap | null,
-      modules: {
-        [id: string]: {
-          renderedExports: string[],
-          removedExports: string[],
-          renderedLength: number,
-          originalLength: number,
-          code: string | null
-        },
+- outputOptions
+- ChunkInfo or AssetInfo
+
+  ```js
+  // AssetInfo
+  moduleId: {
+    fileName: string,
+    name?: string,
+    source: string | Uint8Array,
+    type: 'asset',
+  }
+
+  // ChunkInfo
+  moduleId: {
+    code: string,
+    dynamicImports: string[],
+    exports: string[],
+    facadeModuleId: string | null,
+    fileName: string,
+    implicitlyLoadedBefore: string[],
+    imports: string[],
+    importedBindings: {[imported: string]: string[]},
+    isDynamicEntry: boolean,
+    isEntry: boolean,
+    isImplicitEntry: boolean,
+    map: SourceMap | null,
+    modules: {
+      [id: string]: {
+        renderedExports: string[],
+        removedExports: string[],
+        renderedLength: number,
+        originalLength: number,
+        code: string | null
       },
-      name: string,
-      referencedFiles: string[],
-      type: 'chunk',
-    }
-    ```
+    },
+    name: string,
+    referencedFiles: string[],
+    type: 'chunk',
+  }
+  ```
 
 ```js
 {
@@ -671,14 +686,14 @@ console.log(import.meta.testKey)
 }
 ```
 
-
 ### writeBundle
-与`generateBundle`相似， 但是此时chunk已经生成，无法修改
 
-
+与`generateBundle`相似， 但是此时 chunk 已经生成，无法修改
 
 ## 插件上下文
-在rollup中每个插件都有自己的插件上下文，他具体又有什么用呢举个例子
+
+在 rollup 中每个插件都有自己的插件上下文，他具体又有什么用呢举个例子
+
 ```js
 private runHookSync<H extends SyncPluginHooks>(
         const plugin = this.plugins[pluginIndex];
@@ -699,7 +714,9 @@ private runHookSync<H extends SyncPluginHooks>(
         }
 }
 ```
+
 至于`context`是什么，大家可以定位到`src/utils/PluginContext.ts`文件中
+
 ```js
 const context: PluginContext = {
     addWatchFile(id) {},
@@ -732,11 +749,13 @@ const context: PluginContext = {
     warn(warning) {}
 };
 ```
-也就是说我们可以在插件中直接通过`this.xxx`来调用上面的方法。他们都可以在各个hook中进行调用。下面进行介绍
 
+也就是说我们可以在插件中直接通过`this.xxx`来调用上面的方法。他们都可以在各个 hook 中进行调用。下面进行介绍
 
 ### addWatchFile
+
 用于动态添加对文件的监听，可以在`buildStart`、`load`、`resolveId`和`transform`中使用
+
 ```js
 {
   name: 'addWatchFile',
@@ -748,9 +767,11 @@ const context: PluginContext = {
 ```
 
 ### emitFile
+
 [文档地址](https://rollupjs.org/guide/en/#thisemitfileemittedfile-emittedchunk--emittedasset--string)
 
 发射一个文件到最后的打包中，并且会返回一个`referenceId`,支持两种对象传参
+
 ```js
 {
   type: 'chunk',
@@ -772,7 +793,9 @@ const context: PluginContext = {
 ```
 
 ### error
+
 参数：
+
 ```js
 {
   name: 'error',
@@ -784,7 +807,8 @@ const context: PluginContext = {
 ```
 
 ### getCombinedSourcemap
-用于获取sourceMap，并且只能在`transform hook`中使用
+
+用于获取 sourceMap，并且只能在`transform hook`中使用
 
 ```js
 {
@@ -797,10 +821,13 @@ const context: PluginContext = {
 ```
 
 ### getFileName
+
 获取通过`this.emitFile`文件发出的块或资源的文件名。文件名将相对于`outputOptions.dir`。
 
 ### getModuleIds
+
 获取所有模块完整路径,需要注意的是，它返回的是个迭代器
+
 ```js
 {
   name: 'getModuleIds',
@@ -812,9 +839,10 @@ const context: PluginContext = {
 }
 ```
 
-
 ### getModuleInfo
-获取模块info, 例如可以搭配`getModuleIds`使用
+
+获取模块 info, 例如可以搭配`getModuleIds`使用
+
 ```js
 {
   name: 'getModuleInfo',
@@ -827,7 +855,9 @@ const context: PluginContext = {
 ```
 
 ### getWatchFiles
-获取所有被监听变化的文件路径id, 包括通过`addWatchFile`添加的文件
+
+获取所有被监听变化的文件路径 id, 包括通过`addWatchFile`添加的文件
+
 ```js
 {
   name: 'getWatchFiles',
@@ -838,7 +868,9 @@ const context: PluginContext = {
 ```
 
 ### parse
-用于编译代码，并返回ast
+
+用于编译代码，并返回 ast
+
 ```js
 {
   name: 'parse',
@@ -850,6 +882,7 @@ const context: PluginContext = {
 ```
 
 ### resolve
+
 用于解析传入参数的完整路径,以及其他参数，它会经过所有的`resolveId hook`处理
 
 ```js
@@ -869,9 +902,9 @@ const context: PluginContext = {
 ```
 
 ### setAssetSource
-设置assets资源的代码，例如我们通过`this.emitFile`发射一个文件，返回了referanceId，可以通过这个id修改资源代码
+
+设置 assets 资源的代码，例如我们通过`this.emitFile`发射一个文件，返回了 referanceId，可以通过这个 id 修改资源代码
 
 ```js
 this.setAssetSource(referenceId: string, source: string | Uint8Array) => void
 ```
-

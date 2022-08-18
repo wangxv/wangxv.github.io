@@ -25,7 +25,7 @@ const include = transformIncludesAndExcludes(optionsInclude);
 const exclude = transformIncludesAndExcludes(optionsExclude);
 ```
 
-4. 根据targets配置，获取所有需要用到的插件
+4. 根据 targets 配置，获取所有需要用到的插件
 
 ```js
 // shippedProposals：是否跳过提案的插件
@@ -33,17 +33,24 @@ const exclude = transformIncludesAndExcludes(optionsExclude);
 const compatData = getPluginList(shippedProposals, bugfixes);
 ```
 
-
-5. 判断是否支持exportNamespaceFrom
+5. 判断是否支持 exportNamespaceFrom
 
 ```js
 // 传入插件对应支持的环境、需要包含的插件、需要排除的插件
 // 判断目标环境是否支持 ExportNamespaceFrom
-const shouldSkipExportNamespaceFrom = modules === "auto" && (api.caller == null ? void 0 : api.caller(supportsExportNamespaceFrom)) || modules === false && !(0, _helperCompilationTargets.isRequired)("proposal-export-namespace-from", transformTargets, {
-  compatData,
-  includes: include.plugins,
-  excludes: exclude.plugins
-});
+const shouldSkipExportNamespaceFrom =
+  (modules === "auto" &&
+    (api.caller == null ? void 0 : api.caller(supportsExportNamespaceFrom))) ||
+  (modules === false &&
+    !(0, _helperCompilationTargets.isRequired)(
+      "proposal-export-namespace-from",
+      transformTargets,
+      {
+        compatData,
+        includes: include.plugins,
+        excludes: exclude.plugins,
+      }
+    ));
 ```
 
 6. 获取插件模块名
@@ -56,20 +63,31 @@ const shouldSkipExportNamespaceFrom = modules === "auto" && (api.caller == null 
 const modulesPluginNames = getModulesPluginNames({
   modules,
   transformations: _moduleTransformations.default,
-  shouldTransformESM: modules !== "auto" || !(api.caller != null && api.caller(supportsStaticESM)),
-  shouldTransformDynamicImport: modules !== "auto" || !(api.caller != null && api.caller(supportsDynamicImport)),
+  shouldTransformESM:
+    modules !== "auto" ||
+    !(api.caller != null && api.caller(supportsStaticESM)),
+  shouldTransformDynamicImport:
+    modules !== "auto" ||
+    !(api.caller != null && api.caller(supportsDynamicImport)),
   shouldTransformExportNamespaceFrom: !shouldSkipExportNamespaceFrom,
-  shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait)
+  shouldParseTopLevelAwait: !api.caller || api.caller(supportsTopLevelAwait),
 });
 ```
 
-
-7. 根据targets、include、exclude获取最终的插件列表
+7. 根据 targets、include、exclude 获取最终的插件列表
 
 ```js
-const pluginNames = (0, _helperCompilationTargets.filterItems)(compatData, include.plugins, exclude.plugins, transformTargets, modulesPluginNames, (0, _getOptionSpecificExcludes.default)({
-  loose
-}), _shippedProposals.pluginSyntaxMap);
+const pluginNames = (0, _helperCompilationTargets.filterItems)(
+  compatData,
+  include.plugins,
+  exclude.plugins,
+  transformTargets,
+  modulesPluginNames,
+  (0, _getOptionSpecificExcludes.default)({
+    loose,
+  }),
+  _shippedProposals.pluginSyntaxMap
+);
 ```
 
 8. 删除部分插件
@@ -79,10 +97,9 @@ const pluginNames = (0, _helperCompilationTargets.filterItems)(compatData, inclu
 (0, _filterItems.removeUnsupportedItems)(pluginNames, api.version); // 删除不支持的插件
 ```
 
+## 二、获取 polyfill 所需插件
 
-## 二、获取polyfill所需插件
-
-根据一些配置生成polyfill插件，用于注入运行时的polyfill
+根据一些配置生成 polyfill 插件，用于注入运行时的 polyfill
 
 ```js
 // 获取polyfill插件
@@ -95,9 +112,10 @@ const polyfillPlugins = getPolyfillPlugins({
   proposals,
   shippedProposals,
   regenerator: pluginNames.has("transform-regenerator"),
-  debug
+  debug,
 });
 ```
+
 ::: details getPolyfillPlugins
 
 ```js
@@ -110,7 +128,7 @@ const getPolyfillPlugins = ({
   proposals,
   shippedProposals,
   regenerator,
-  debug
+  debug,
 }) => {
   const polyfillPlugins = [];
 
@@ -123,42 +141,69 @@ const getPolyfillPlugins = ({
       exclude,
       proposals,
       shippedProposals,
-      debug
+      debug,
     };
     // 判断是否配置corejs
     if (corejs) {
       if (useBuiltIns === "usage") {
         if (corejs.major === 2) {
           // 添加 babel-plugin-polyfill-corejs2 和 babel-polyfill 插件
-          polyfillPlugins.push([pluginCoreJS2, pluginOptions], [_babelPolyfill.default, {
-            usage: true
-          }]);
+          polyfillPlugins.push(
+            [pluginCoreJS2, pluginOptions],
+            [
+              _babelPolyfill.default,
+              {
+                usage: true,
+              },
+            ]
+          );
         } else {
           // 添加 babel-plugin-polyfill-corejs3 插件 和 babel-polyfill 插件
-          polyfillPlugins.push([pluginCoreJS3, pluginOptions], [_babelPolyfill.default, {
-            usage: true,
-            deprecated: true
-          }]);
+          polyfillPlugins.push(
+            [pluginCoreJS3, pluginOptions],
+            [
+              _babelPolyfill.default,
+              {
+                usage: true,
+                deprecated: true,
+              },
+            ]
+          );
         }
         // 添加 babel-plugin-polyfill-regenerator 插件
         if (regenerator) {
-          polyfillPlugins.push([pluginRegenerator, {
-            method: "usage-global",
-            debug
-          }]);
+          polyfillPlugins.push([
+            pluginRegenerator,
+            {
+              method: "usage-global",
+              debug,
+            },
+          ]);
         }
       } else {
         if (corejs.major === 2) {
           // babel-polyfill 插件（全局引入）、babel-plugin-polyfill-corejs2插件
           // 注意插件执行顺序，先执行的babel-polyfill
-          polyfillPlugins.push([_babelPolyfill.default, {
-            regenerator
-          }], [pluginCoreJS2, pluginOptions]);
+          polyfillPlugins.push(
+            [
+              _babelPolyfill.default,
+              {
+                regenerator,
+              },
+            ],
+            [pluginCoreJS2, pluginOptions]
+          );
         } else {
           // 添加 babel-plugin-polyfill-corejs3 插件 和 babel-polyfill 插件
-          polyfillPlugins.push([pluginCoreJS3, pluginOptions], [_babelPolyfill.default, {
-            deprecated: true
-          }]);
+          polyfillPlugins.push(
+            [pluginCoreJS3, pluginOptions],
+            [
+              _babelPolyfill.default,
+              {
+                deprecated: true,
+              },
+            ]
+          );
 
           // 如果不需要regenerator 仍然也会被push进去，因为useBuiltIns不是usage, 说明需要全量引入
           if (!regenerator) {
@@ -172,46 +217,40 @@ const getPolyfillPlugins = ({
   return polyfillPlugins;
 };
 ```
+
 :::
 
+- 存在 corejs 配置
 
-+ 存在corejs配置
   - **useBuiltIns: usage**
 
-    - 如果配置core-js@3
+    - 如果配置 core-js@3
 
-      + 添加 babel-plugin-polyfill-corejs2
-      + 添加 babel-polyfill 插件 (@babel/preset-env/lib/polyfills/babel-polyfill.js)
+      - 添加 babel-plugin-polyfill-corejs2
+      - 添加 babel-polyfill 插件 (@babel/preset-env/lib/polyfills/babel-polyfill.js)
 
-    - 如果配置core-js@2
-      + 添加 babel-plugin-polyfill-corejs2
-      + 添加 babel-polyfill 插件 (@babel/preset-env/lib/polyfills/babel-polyfill.js)
+    - 如果配置 core-js@2
+
+      - 添加 babel-plugin-polyfill-corejs2
+      - 添加 babel-polyfill 插件 (@babel/preset-env/lib/polyfills/babel-polyfill.js)
 
     - 如果配置 transform-regenerator
-      + 添加 babel-plugin-polyfill-regenerator 插件
+      - 添加 babel-plugin-polyfill-regenerator 插件
 
   - **useBuiltIns: entry | false**
 
-    - 如果配置core-js@3
+    - 如果配置 core-js@3
 
-      + 添加 babel-plugin-polyfill-corejs2
-      + 添加 babel-polyfill 插件 (@babel/preset-env/lib/polyfills/babel-polyfill.js)
+      - 添加 babel-plugin-polyfill-corejs2
+      - 添加 babel-polyfill 插件 (@babel/preset-env/lib/polyfills/babel-polyfill.js)
 
-    - 如果配置core-js@2
-      + 添加 babel-plugin-polyfill-corejs2
-      + 添加 babel-polyfill 插件 (@babel/preset-env/lib/polyfills/babel-polyfill.js)
+    - 如果配置 core-js@2
+
+      - 添加 babel-plugin-polyfill-corejs2
+      - 添加 babel-polyfill 插件 (@babel/preset-env/lib/polyfills/babel-polyfill.js)
 
     - 如果没有配置 transform-regenerator 插件
-      + 添加 regenerator 插件删除 regenerator 导入（@babel/preset-env/lib/polyfills/regenerator.js）
-
-
-
-
-
-
-
-
-
+      - 添加 regenerator 插件删除 regenerator 导入（@babel/preset-env/lib/polyfills/regenerator.js）
 
 ## 三、@babel/preset-env/lib/polyfills/regenerator.js
 
@@ -219,7 +258,10 @@ const getPolyfillPlugins = ({
 
 ```js
 function isRegeneratorSource(source) {
-  return source === "regenerator-runtime/runtime" || source === "regenerator-runtime/runtime.js";
+  return (
+    source === "regenerator-runtime/runtime" ||
+    source === "regenerator-runtime/runtime.js"
+  );
 }
 
 // 作用：如果代码不需要支持 regenerator 就使用这个插件，删除 regenerator 的导入代码
@@ -234,15 +276,14 @@ function _default() {
     },
 
     Program(path) {
-      path.get("body").forEach(bodyPath => {
+      path.get("body").forEach((bodyPath) => {
         // 如果是 require('regenerator-runtime/runtime') 就直接删除该import
         if (isRegeneratorSource((0, _utils.getRequireSource)(bodyPath))) {
           this.regeneratorImportExcluded = true;
           bodyPath.remove();
         }
       });
-    }
-
+    },
   };
   return {
     name: "preset-env/remove-regenerator",
@@ -260,27 +301,21 @@ function _default() {
           filename = filename.replace(/\\/g, "/");
         }
 
-        console.log(`\n[${filename}] Based on your targets, regenerator-runtime import excluded.`);
+        console.log(
+          `\n[${filename}] Based on your targets, regenerator-runtime import excluded.`
+        );
       }
-    }
-
+    },
   };
 }
 ```
 
-
-
 ## 四、@babel/preset-env/lib/polyfills/babel-polyfill.js
 
-作用：将代码里的`@babel/polyfill`导入替换成 core-js和regenerator 的导入
+作用：将代码里的`@babel/polyfill`导入替换成 core-js 和 regenerator 的导入
+
 ```js
-function _default({
-  template
-}, {
-  regenerator,
-  deprecated,
-  usage
-}) {
+function _default({ template }, { regenerator, deprecated, usage }) {
   return {
     name: "preset-env/replace-babel-polyfill",
     visitor: {
@@ -292,12 +327,11 @@ function _default({
 
           // core-js3 不会删除import
           if (!deprecated) path.remove();
-
         } else if (src === "@babel/polyfill") {
           if (deprecated) {
             console.warn(BABEL_POLYFILL_DEPRECATION);
 
-          // 替换 import '@babel/polyfill'
+            // 替换 import '@babel/polyfill'
           } else if (regenerator) {
             path.replaceWithMultiple(template.ast`
               import "core-js";
@@ -312,7 +346,7 @@ function _default({
       },
 
       Program(path) {
-        path.get("body").forEach(bodyPath => {
+        path.get("body").forEach((bodyPath) => {
           const src = (0, _utils.getRequireSource)(bodyPath);
 
           if (usage && (0, _utils.isPolyfillSource)(src)) {
@@ -333,9 +367,8 @@ function _default({
             }
           }
         });
-      }
-
-    }
+      },
+    },
   };
 }
 ```

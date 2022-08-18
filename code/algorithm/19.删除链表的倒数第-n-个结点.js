@@ -17,21 +17,20 @@
  * @param {number} n
  * @return {ListNode}
  */
-var removeNthFromEnd = function(head, n) {
-  let ret = new ListNode(-1, head)
-  let fast = ret
-  let slow = ret
-  while(n--) {
-    fast = fast.next
+var removeNthFromEnd = function (head, n) {
+  let ret = new ListNode(-1, head);
+  let fast = ret;
+  let slow = ret;
+  while (n--) {
+    fast = fast.next;
   }
-  if (!fast) return ret.next
+  if (!fast) return ret.next;
 
-  while(fast.next) {
-    fast = fast.next
-    slow = slow.next
+  while (fast.next) {
+    fast = fast.next;
+    slow = slow.next;
   }
-  slow.next = slow.next.next
-  return ret.next
+  slow.next = slow.next.next;
+  return ret.next;
 };
 // @lc code=end
-

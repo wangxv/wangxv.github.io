@@ -1,8 +1,8 @@
 const STATUS = {
-  PENDING: 'pending',
-  FULFILLED: 'fulfilled',
-  REJECTED: 'rejected'
-}
+  PENDING: "pending",
+  FULFILLED: "fulfilled",
+  REJECTED: "rejected",
+};
 
 class SelfPromise {
   state = STATUS.PENDING; // 状态
@@ -16,7 +16,7 @@ class SelfPromise {
    * executor(resolve, reject) resolve成功时调用 reject失败时调用
    */
   constructor(executor) {
-  /**
+    /**
    *  Promise存在三个状态（state）pending、fulfilled、rejected
       pending（等待态）为初始态，并可以转化为fulfilled（成功态）和rejected（失败态）
       成功时，不可转为其他状态，且必须有一个不可改变的值（value）
@@ -34,7 +34,7 @@ class SelfPromise {
         this.value = value;
 
         // resolve执行，调用成功数组函数
-        this.onResolvedCallbacks.forEach(fn => fn());
+        this.onResolvedCallbacks.forEach((fn) => fn());
       }
     };
     const reject = (reason) => {
@@ -45,9 +45,9 @@ class SelfPromise {
         this.reason = reason;
 
         // reject执行，调用失败数组函数
-        this.onRejectedCallback.forEach(fn => fn());
+        this.onRejectedCallback.forEach((fn) => fn());
       }
-    }
+    };
     // 如果执行executor报错，直接执行reject
     try {
       executor(resolve, reject);
@@ -63,9 +63,15 @@ class SelfPromise {
    */
   then(onFulfilled, onRejected) {
     // onFulfilled如果不是函数，就忽略onFulfilled, 直接返回value
-    onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value => value;
+    onFulfilled =
+      typeof onFulfilled === "function" ? onFulfilled : (value) => value;
     // onRejected如果不是函数，就忽略onRejected, 直接抛出错误
-    onRejected = typeof onRejected === 'function' ? onRejected : reason => { throw reason };
+    onRejected =
+      typeof onRejected === "function"
+        ? onRejected
+        : (reason) => {
+            throw reason;
+          };
 
     const promise2 = new SelfPromise((resolve, reject) => {
       const fulfilledAsync = () => {
@@ -112,18 +118,21 @@ class SelfPromise {
     return promise2;
   }
   // catch方法
-  catch (fn) {
+  catch(fn) {
     return this.then(null, fn);
   }
   // finally方法用于无论是resolve还是reject，finally的参数函数都会被执行。
-  finally (fn) {
-    return this.then(value => {
-      fn();
-      return value;
-    }, reason => {
-      fn();
-      throw reason;
-    });
+  finally(fn) {
+    return this.then(
+      (value) => {
+        fn();
+        return value;
+      },
+      (reason) => {
+        fn();
+        throw reason;
+      }
+    );
   }
 }
 
@@ -143,29 +152,35 @@ class SelfPromise {
 function resolvePromise(promise2, x, resolve, reject) {
   // 循环引用报错
   if (x === promise2) {
-    return reject(new TypeError('The promise and the return value are the same'));
+    return reject(
+      new TypeError("The promise and the return value are the same")
+    );
   }
   // 防止多次调用
   let called;
   // x 不是null,且x是对象或者函数
-  if (x !== null && (typeof x === 'object' || typeof x === 'function')) {
+  if (x !== null && (typeof x === "object" || typeof x === "function")) {
     try {
-      // 声明then = x 的then方法 
+      // 声明then = x 的then方法
       let then = x.then;
       // 如果then是函数，默认就是promise
-      if (typeof then === 'function') {
+      if (typeof then === "function") {
         // 让then执行，第一个参数是this, 后面的参数是成功回调，和失败回调
-        then.call(x, success => {
-          // 成功和失败的回调只能调用一个
-          if (called) return;
-          called = true;
-          // 如果resolve的值依旧是promise，就继续解析
-          resolvePromise(promise2, success, resolve, reject);
-        }, err => {
-          if (called) return;
-          called = true;
-          reject(err); // 失败
-        })
+        then.call(
+          x,
+          (success) => {
+            // 成功和失败的回调只能调用一个
+            if (called) return;
+            called = true;
+            // 如果resolve的值依旧是promise，就继续解析
+            resolvePromise(promise2, success, resolve, reject);
+          },
+          (err) => {
+            if (called) return;
+            called = true;
+            reject(err); // 失败
+          }
+        );
       } else {
         resolve(x); // 直接成功即可
       }
@@ -182,16 +197,16 @@ function resolvePromise(promise2, x, resolve, reject) {
 }
 
 SelfPromise.resolve = function (value) {
-  return new SelfPromise(resolve => {
+  return new SelfPromise((resolve) => {
     resolve(value);
   });
-}
+};
 
 SelfPromise.reject = function (reason) {
-  return new SelfPromise((resolve, reject) =>{
+  return new SelfPromise((resolve, reject) => {
     reject(reason);
   });
-}
+};
 
 SelfPromise.race = function (promises) {
   return new SelfPromise((resolve, reject) => {
@@ -199,14 +214,14 @@ SelfPromise.race = function (promises) {
       promises[i].then(resolve, reject);
     }
   });
-}
+};
 
 SelfPromise.all = (promises) => {
   let arr = [];
   let count = 0;
   return new SelfPromise((resolve, reject) => {
     for (let i = 0; i < promises.length; i++) {
-      promises[i].then(data => {
+      promises[i].then((data) => {
         arr[i] = data;
         count++;
         if (count === promises.length) {
@@ -215,7 +230,7 @@ SelfPromise.all = (promises) => {
       }, reject);
     }
   });
-}
+};
 
 SelfPromise.deferred = function () {
   let dfd = {};
@@ -224,24 +239,29 @@ SelfPromise.deferred = function () {
     dfd.reject = reject;
   });
   return dfd;
-}
+};
 
-SelfPromise.allSettled = function(promises) {
+SelfPromise.allSettled = function (promises) {
   return new SelfPromise((resolve) => {
-    const data = []
-    for (let i = 0;i < promises.length;i++) {
-      const promise = promises[i]
-      promise.then(res => {
-        data[i] = { status: 'fulfilled', value: res }
-      }, error => {
-        data[i] = { status: 'rejected', reason: error }
-      }).finally(() => {
-        if (i === promises.length - 1) {
-          resolve(data)
-        }
-      })
+    const data = [];
+    for (let i = 0; i < promises.length; i++) {
+      const promise = promises[i];
+      promise
+        .then(
+          (res) => {
+            data[i] = { status: "fulfilled", value: res };
+          },
+          (error) => {
+            data[i] = { status: "rejected", reason: error };
+          }
+        )
+        .finally(() => {
+          if (i === promises.length - 1) {
+            resolve(data);
+          }
+        });
     }
-  })
-}
+  });
+};
 
 module.exports = SelfPromise;

@@ -17,21 +17,20 @@
  * @param {TreeNode} root
  * @return {TreeNode}
  */
-var convertBST = function(root) {
-  let pre = 0
+var convertBST = function (root) {
+  let pre = 0;
   function fn(root) {
-    if (!root) return
-    fn(root.right)
+    if (!root) return;
+    fn(root.right);
     if (pre) {
       // 和当前节点累加
-      root.val += pre
+      root.val += pre;
     }
     // 记录前一个值
-    pre = root.val
-    fn(root.left)
+    pre = root.val;
+    fn(root.left);
   }
-  fn(root)
-  return root
+  fn(root);
+  return root;
 };
 // @lc code=end
-

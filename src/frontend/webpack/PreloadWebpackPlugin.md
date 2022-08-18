@@ -1,7 +1,7 @@
-# PreloadWebpackPlugin插件实现
+# PreloadWebpackPlugin 插件实现
 
 ```js
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 class PreloadWebpackPlugin {
   constructor(options) {
@@ -9,24 +9,27 @@ class PreloadWebpackPlugin {
   }
 
   apply(compiler) {
-    compiler.hooks.compilation.tap('PreloadWebpackPlugin', (compilation) => {
+    compiler.hooks.compilation.tap("PreloadWebpackPlugin", (compilation) => {
       // 在准备生成资源标签之前执行
-      HtmlWebpackPlugin.getHooks(compilation).beforeAssetTagGeneration.tapAsync('PreloadWebpackPlugin', (htmlData, callback) => {
-        this.generateLinks(compilation, htmlData, callback)
-      })
-    })
+      HtmlWebpackPlugin.getHooks(compilation).beforeAssetTagGeneration.tapAsync(
+        "PreloadWebpackPlugin",
+        (htmlData, callback) => {
+          this.generateLinks(compilation, htmlData, callback);
+        }
+      );
+    });
 
-    compiler.hooks.compilation.tap('PreloadWebpackPlugin', (compilation) => {
+    compiler.hooks.compilation.tap("PreloadWebpackPlugin", (compilation) => {
       HtmlWebpackPlugin.getHooks(compilation).alterAssetTags.tap(
-        'PreloadWebpackPlugin',
+        "PreloadWebpackPlugin",
         (htmlData) => {
           const { resourceHints } = this;
           if (resourceHints) {
             // 修改生成的标签
             htmlData.assetTags.styles = [
               ...resourceHints,
-              ...htmlData.assetTags.styles
-            ]
+              ...htmlData.assetTags.styles,
+            ];
           }
           return htmlData;
         }
@@ -38,10 +41,10 @@ class PreloadWebpackPlugin {
     const { rel, include } = this.options;
     //本次编译产出的代码块
     let chunks = [...compilation.chunks];
-    if (include === undefined || include === 'asyncChunks') {
+    if (include === undefined || include === "asyncChunks") {
       //如果chunk.canBeInitial()为true,说明这是一个入口代码块
       //过滤一下，只留下异步代码块
-      chunks = chunks.filter(chunk => !chunk.canBeInitial());
+      chunks = chunks.filter((chunk) => !chunk.canBeInitial());
     }
 
     // 筛选异步代码块对应的文件
@@ -53,18 +56,18 @@ class PreloadWebpackPlugin {
     // 创建Link标签对象数组
     for (const file of allFiles.values()) {
       links.push({
-        tagName: 'link',
+        tagName: "link",
         attributes: {
-          rel,//preload prefetch
-          href: file
-        }
+          rel, //preload prefetch
+          href: file,
+        },
       });
     }
 
     this.resourceHints = links;
-    callback()
+    callback();
   }
 }
 
-module.exports = PreloadWebpackPlugin
+module.exports = PreloadWebpackPlugin;
 ```

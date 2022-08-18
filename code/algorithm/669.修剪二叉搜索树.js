@@ -19,19 +19,18 @@
  * @param {number} high
  * @return {TreeNode}
  */
-var trimBST = function(root, low, high) {
-  if (!root) return null
+var trimBST = function (root, low, high) {
+  if (!root) return null;
   if (root.val < low) {
     // 如果不在区间 往右搜索 其实这时候已经做了删除操作
-    return trimBST(root.right, low, high)
+    return trimBST(root.right, low, high);
   } else if (root.val > high) {
     // 如果不在区间 往左搜索 其实这时候已经做了删除操作
-    return trimBST(root.left, low, high)
+    return trimBST(root.left, low, high);
   } else {
-    root.left = trimBST(root.left, low, high)
-    root.right = trimBST(root.right, low, high)
+    root.left = trimBST(root.left, low, high);
+    root.right = trimBST(root.right, low, high);
   }
-  return root
+  return root;
 };
 // @lc code=end
-

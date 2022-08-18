@@ -1,11 +1,13 @@
-# CSS实现一个扇形
-::: normal-demo CSS实现一个扇形
+# CSS 实现一个扇形
+
+::: normal-demo CSS 实现一个扇形
 
 ```html
 <div>
   <div class="sector"></div>
 </div>
 ```
+
 ```css
 .sector {
   width: 0;
@@ -15,4 +17,5 @@
   border-radius: 50%;
 }
 ```
+
 :::

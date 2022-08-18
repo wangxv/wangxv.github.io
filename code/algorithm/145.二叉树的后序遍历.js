@@ -17,20 +17,19 @@
  * @param {TreeNode} root
  * @return {number[]}
  */
-var postorderTraversal = function(root) {
-  if (!root) return []
-  const stack = [root]
-  const res = []
-  while(stack.length) {
-    const node = stack.pop()
-    res.unshift(node.val)
-    node.left && stack.push(node.left)
-    node.right && stack.push(node.right)
+var postorderTraversal = function (root) {
+  if (!root) return [];
+  const stack = [root];
+  const res = [];
+  while (stack.length) {
+    const node = stack.pop();
+    res.unshift(node.val);
+    node.left && stack.push(node.left);
+    node.right && stack.push(node.right);
   }
-  return res
+  return res;
 };
 // @lc code=end
-
 
 // @after-stub-for-debug-begin
 module.exports = postorderTraversal;

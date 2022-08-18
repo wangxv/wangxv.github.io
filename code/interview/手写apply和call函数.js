@@ -1,37 +1,37 @@
-Function.prototype.myapply = function(ctx, args) {
+Function.prototype.myapply = function (ctx, args) {
   ctx.fn = this;
-  var res
+  var res;
   if (!args) {
-    res = ctx.fn()
+    res = ctx.fn();
   } else {
-    var arr = []
-    for (var i = 0;i < args.length;i++) {
-      arr.push('args[' + i + ']')
+    var arr = [];
+    for (var i = 0; i < args.length; i++) {
+      arr.push("args[" + i + "]");
     }
-    res = eval('ctx.fn(' + arr + ')')
+    res = eval("ctx.fn(" + arr + ")");
   }
-  delete ctx.fn
-  return res
-}
-Function.prototype.mycall = function(ctx) {
+  delete ctx.fn;
+  return res;
+};
+Function.prototype.mycall = function (ctx) {
   ctx.fn = this;
-  var res
-  var arr = []
-  for (var i = 1;i < arguments.length;i++) {
-    arr.push('arguments[' + i + ']')
+  var res;
+  var arr = [];
+  for (var i = 1; i < arguments.length; i++) {
+    arr.push("arguments[" + i + "]");
   }
-  res = eval('ctx.fn(' + arr + ')')
-  delete ctx.fn
-  return res
-}
+  res = eval("ctx.fn(" + arr + ")");
+  delete ctx.fn;
+  return res;
+};
 
 function Person() {
   console.log(this.name);
-  return this.name
+  return this.name;
 }
-Person.prototype.name = 'jake'
+Person.prototype.name = "jake";
 
 const person = {
-  name: 'jack'
-}
-Person.mycall(person, 1, 2)
+  name: "jack",
+};
+Person.mycall(person, 1, 2);

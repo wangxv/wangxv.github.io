@@ -4,13 +4,16 @@
 
 1. 获取需要加载的运行时模块名
 
-
-+ 配置corejs3：必须安装@babel/runtime-corejs3
-+ 配置corejs2: 必须安装@babel/runtime-corejs2
-+ 不配置corejs: 加载@babel/runtime（仅支持helper的模块化，切换到preset-env的corejs配置）
+- 配置 corejs3：必须安装@babel/runtime-corejs3
+- 配置 corejs2: 必须安装@babel/runtime-corejs2
+- 不配置 corejs: 加载@babel/runtime（仅支持 helper 的模块化，切换到 preset-env 的 corejs 配置）
 
 ```js
-const moduleName = injectCoreJS3 ? "@babel/runtime-corejs3" : injectCoreJS2 ? "@babel/runtime-corejs2" : "@babel/runtime";
+const moduleName = injectCoreJS3
+  ? "@babel/runtime-corejs3"
+  : injectCoreJS2
+  ? "@babel/runtime-corejs2"
+  : "@babel/runtime";
 const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 ```
 
@@ -18,10 +21,12 @@ const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
 ```js
 // 获取模块路径
-const modulePath = (0, _getRuntimePath.default)(moduleName, dirname, absoluteRuntime);
+const modulePath = (0, _getRuntimePath.default)(
+  moduleName,
+  dirname,
+  absoluteRuntime
+);
 ```
-
-
 
 3. 继承`babel-plugin-polyfill-corejsx`插件和`babel-plugin-polyfill-regenerator`插件
 
@@ -29,7 +34,7 @@ const modulePath = (0, _getRuntimePath.default)(moduleName, dirname, absoluteRun
 function createCorejsPlgin(plugin, options, regeneratorPlugin) {
   return (api, _, filename) => {
     return Object.assign({}, plugin(api, options, filename), {
-      inherits: regeneratorPlugin
+      inherits: regeneratorPlugin,
     });
   };
 }
@@ -41,49 +46,59 @@ function createRegeneratorPlugin(options) {
   };
 }
 
-
 return {
-  inherits: injectCoreJS2 ? createCorejsPlgin(pluginCorejs2, {
-      method: "usage-pure",
-      absoluteImports: absoluteRuntime ? modulePath : false,
-      [pluginsCompat]: {
-        runtimeVersion,
-        useBabelRuntime: modulePath,
-        ext: ""
-      }
-    }, createRegeneratorPlugin({
-      method: "usage-pure",
-      absoluteImports: absoluteRuntime ? modulePath : false,
-      [pluginsCompat]: {
-        useBabelRuntime: modulePath
-      }
-    })) : injectCoreJS3 ? createCorejsPlgin(pluginCorejs3, {
-      method: "usage-pure",
-      version: 3,
-      proposals,
-      absoluteImports: absoluteRuntime ? modulePath : false,
-      [pluginsCompat]: {
-        useBabelRuntime: modulePath,
-        ext: ""
-      }
-    }, createRegeneratorPlugin({
-      method: "usage-pure",
-      absoluteImports: absoluteRuntime ? modulePath : false,
-      [pluginsCompat]: {
-        useBabelRuntime: modulePath
-      }
-    })) : createRegeneratorPlugin({
-      method: "usage-pure",
-      absoluteImports: absoluteRuntime ? modulePath : false,
-      [pluginsCompat]: {
-        useBabelRuntime: modulePath
-      }
-    }),
-}
+  inherits: injectCoreJS2
+    ? createCorejsPlgin(
+        pluginCorejs2,
+        {
+          method: "usage-pure",
+          absoluteImports: absoluteRuntime ? modulePath : false,
+          [pluginsCompat]: {
+            runtimeVersion,
+            useBabelRuntime: modulePath,
+            ext: "",
+          },
+        },
+        createRegeneratorPlugin({
+          method: "usage-pure",
+          absoluteImports: absoluteRuntime ? modulePath : false,
+          [pluginsCompat]: {
+            useBabelRuntime: modulePath,
+          },
+        })
+      )
+    : injectCoreJS3
+    ? createCorejsPlgin(
+        pluginCorejs3,
+        {
+          method: "usage-pure",
+          version: 3,
+          proposals,
+          absoluteImports: absoluteRuntime ? modulePath : false,
+          [pluginsCompat]: {
+            useBabelRuntime: modulePath,
+            ext: "",
+          },
+        },
+        createRegeneratorPlugin({
+          method: "usage-pure",
+          absoluteImports: absoluteRuntime ? modulePath : false,
+          [pluginsCompat]: {
+            useBabelRuntime: modulePath,
+          },
+        })
+      )
+    : createRegeneratorPlugin({
+        method: "usage-pure",
+        absoluteImports: absoluteRuntime ? modulePath : false,
+        [pluginsCompat]: {
+          useBabelRuntime: modulePath,
+        },
+      }),
+};
 ```
 
-
-4. 重写helper生成方法，拦截polyfill代码生成
+4. 重写 helper 生成方法，拦截 polyfill 代码生成
 
 `transform-runtime`实现了自己的`helperGenerator`方法
 
@@ -126,7 +141,7 @@ pre(file) {
 }
 ```
 
-当`babel-core`生成`polyfill代码`时, 如果存在`helperGenerator`就使用这个generator
+当`babel-core`生成`polyfill代码`时, 如果存在`helperGenerator`就使用这个 generator
 
 ```js
   addHelper(name) {
@@ -141,4 +156,3 @@ pre(file) {
     // 省略代码...
   }
 ```
-

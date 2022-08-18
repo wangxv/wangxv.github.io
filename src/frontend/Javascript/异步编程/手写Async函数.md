@@ -1,26 +1,30 @@
-# 手写Async函数
+# 手写 Async 函数
+
 ```js
 function generatorToAsync(generatorFn) {
-  return function() {
-    const gen = generatorFn.apply(this, arguments)
+  return function () {
+    const gen = generatorFn.apply(this, arguments);
     return Promise((resolve, reject) => {
       function go(key, arg) {
-        let res
+        let res;
         try {
-          res = gen[key](arg)
+          res = gen[key](arg);
         } catch (e) {
-          return reject(e)
+          return reject(e);
         }
 
-        const { value, done } = res
+        const { value, done } = res;
         if (done) {
-          return resolve(value)
+          return resolve(value);
         } else {
-          return Promise.resolve(value).then(val => go('next', val), err => go('throw', err))
+          return Promise.resolve(value).then(
+            (val) => go("next", val),
+            (err) => go("throw", err)
+          );
         }
       }
-      go('next')
-    })
-  }
+      go("next");
+    });
+  };
 }
 ```

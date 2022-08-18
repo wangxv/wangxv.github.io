@@ -1,7 +1,6 @@
 # @babel/traverse
 
-本文基于babel插件通关秘籍实现`@babel/traverse`
-
+本文基于 babel 插件通关秘籍实现`@babel/traverse`
 
 [源码位置](https://github.com/QuarkGluonPlasma/babel-plugin-exercize/tree/master/exercize-babel/src/traverse)
 
@@ -10,37 +9,36 @@
 ```js
 const astDefinationsMap = new Map();
 
-astDefinationsMap.set('Program', {
-    visitor: ['body']
+astDefinationsMap.set("Program", {
+  visitor: ["body"],
 });
-astDefinationsMap.set('VariableDeclaration', {
-    visitor: ['declarations']
+astDefinationsMap.set("VariableDeclaration", {
+  visitor: ["declarations"],
 });
-astDefinationsMap.set('VariableDeclarator', {
-    visitor: ['id', 'init']
+astDefinationsMap.set("VariableDeclarator", {
+  visitor: ["id", "init"],
 });
-astDefinationsMap.set('Identifier', {});
-astDefinationsMap.set('NumericLiteral', {});
-astDefinationsMap.set('FunctionDeclaration', {
-    visitor: ['id', 'params', 'body']
+astDefinationsMap.set("Identifier", {});
+astDefinationsMap.set("NumericLiteral", {});
+astDefinationsMap.set("FunctionDeclaration", {
+  visitor: ["id", "params", "body"],
 });
-astDefinationsMap.set('BlockStatement', {
-    visitor: ['body']
+astDefinationsMap.set("BlockStatement", {
+  visitor: ["body"],
 });
-astDefinationsMap.set('ReturnStatement', {
-    visitor: ['argument']
+astDefinationsMap.set("ReturnStatement", {
+  visitor: ["argument"],
 });
-astDefinationsMap.set('BinaryExpression', {
-    visitor: ['left', 'right']
+astDefinationsMap.set("BinaryExpression", {
+  visitor: ["left", "right"],
 });
-astDefinationsMap.set('ExpressionStatement', {
-    visitor: ['expression']
+astDefinationsMap.set("ExpressionStatement", {
+  visitor: ["expression"],
 });
-astDefinationsMap.set('CallExpression', {
-    visitor: ['callee', 'arguments']
+astDefinationsMap.set("CallExpression", {
+  visitor: ["callee", "arguments"],
 });
 ```
-
 
 ## 二、递归遍历
 
@@ -49,17 +47,17 @@ function traverse(node, visitors) {
   // 获取可遍历的属性
   const defination = astDefinationsMap.get(node.type);
   if (defination.visitor) {
-    defination.visitor.forEach(key => {
+    defination.visitor.forEach((key) => {
       const prop = node[key];
       // 判断可遍历属性是不是数组，如果是数组就循环递归
       if (Array.isArray(prop)) {
-        prop.forEach(childNode => {
+        prop.forEach((childNode) => {
           traverse(childNode, visitors);
-        })
+        });
       } else {
         traverse(prop, visitors);
       }
-    })
+    });
   }
 }
 ```
@@ -68,7 +66,7 @@ function traverse(node, visitors) {
 2. 判断可遍历属性是不是数组，如果是数组就循环递归
 3. 不是数组就继续递归 traverse
 
-## 三、enter和exit
+## 三、enter 和 exit
 
 ```js {7,13,29}
 function traverse(node, visitors) {
@@ -102,15 +100,16 @@ function traverse(node, visitors) {
 +  visitorFuncs.exit && visitorFuncs.exit(node);
 }
 ```
-enter和exit原理就是在递归的前和后执行。
+
+enter 和 exit 原理就是在递归的前和后执行。
 ::: tip
 enter 阶段在遍历子节点之前，那么修改之后就可以立刻遍历子节点，而 exit 是在遍历结束之后了，所以不会继续遍历子节点。如果 enter 阶段修改了 AST 但是不想遍历新生成的子节点，可以用 `path.skip` 跳过遍历。
 :::
 
+## 四、实现 path
 
-
-## 四、实现path
 先我们创建一个 path 的类，记录当前节点 node，父节点 parent 以及父节点的 path
+
 ```js
 class NodePath {
   constructor(node, parent, parentPath) {
@@ -155,8 +154,8 @@ function traverse(node, visitors, parent, parentPath) {
 
 ```
 
+## 五、实现 path api
 
-## 五、实现path api
 replaceWith 就是在父节点替换当前节点为另一个节点。但是我们现在并不知道当前节点在父节点的什么属性上，所以在遍历的时候要记录属性名的信息。
 
 这里要记录两个属性 key 和 listkey，因为属性可以是数组，如果是数组的话就要知道是什么属性的什么下标，比如 params 的第 2 个元素，这时候 key 是 params 而 listkey 是 2。如果不是数组的话，listkey 为空。
@@ -208,6 +207,7 @@ class NodePath {
 ```
 
 ### path.replaceWith
+
 ```js
 replaceWith(node) {
   if (this.listKey != undefined) {
@@ -219,6 +219,7 @@ replaceWith(node) {
 ```
 
 ### path.remove
+
 ```js
 remove () {
   if (this.listKey != undefined) {
@@ -249,6 +250,7 @@ find(callback) {
 ```
 
 ### path.skip
+
 skip 的实现可以给节点加个标记，遍历的过程中如果发现了这个标记就跳过子节点遍历。
 
 ```js
@@ -292,8 +294,7 @@ module.exports = function traverse(node, visitors, parent, parentPath, key, list
 }
 ```
 
-
-## 六、实现Bingding和Scope
+## 六、实现 Bingding 和 Scope
 
 ```js
 class Binding {
@@ -327,7 +328,7 @@ class Scope {
     let res = this.getOwnBinding(id);
     // 没有就继续向父作用域查找
     if (res === undefined && this.parent) {
-        res = this.parent.getOwnBinding(id);
+      res = this.parent.getOwnBinding(id);
     }
     return res;
   }
@@ -338,11 +339,11 @@ class Scope {
 }
 ```
 
-+ scope 中记录着 bindings，也就是声明，每个声明会记录在哪里声明的，被哪里引用的。
-+ 遇到 block 节点，创建 scope 的时候，要遍历作用域中的所有声明（VariableDeclaraion、FunctionDeclaration），记录该 binding 到 scope 中。
-
+- scope 中记录着 bindings，也就是声明，每个声明会记录在哪里声明的，被哪里引用的。
+- 遇到 block 节点，创建 scope 的时候，要遍历作用域中的所有声明（VariableDeclaraion、FunctionDeclaration），记录该 binding 到 scope 中。
 
 在 NodePath 里面定义一个 scope 的 get 的方法
+
 ```js
 get scope() {
   if (this.__scope) {
@@ -364,27 +365,28 @@ isBlock() {
 我们在记录节点的遍历的属性的时候，也记录了该节点是否是 block：
 
 ```js
-astDefinationsMap.set('Program', {
-  visitor: ['body'],
-  isBlock: true
+astDefinationsMap.set("Program", {
+  visitor: ["body"],
+  isBlock: true,
 });
-astDefinationsMap.set('FunctionDeclaration', {
-  visitor: ['id', 'params', 'body'],
-  isBlock: true
+astDefinationsMap.set("FunctionDeclaration", {
+  visitor: ["id", "params", "body"],
+  isBlock: true,
 });
 ```
 
 scope 创建完成之后我们要扫描作用域中所有的声明，记录到 scope。这里要注意的是，因为遇到函数作用域要跳过遍历，因为它有自己独立的作用域。
+
 ```js
 // Scope的 constructor 中初始化bingding
 path.traverse({
   VariableDeclarator: (childPath) => {
-      this.registerBinding(childPath.node.id.name, childPath);
+    this.registerBinding(childPath.node.id.name, childPath);
   },
   FunctionDeclaration: (childPath) => {
-      childPath.skip();
-      this.registerBinding(childPath.node.id.name, childPath);
-  }
+    childPath.skip();
+    this.registerBinding(childPath.node.id.name, childPath);
+  },
 });
 ```
 
@@ -395,8 +397,12 @@ path.traverse({
 ```js
 // Scope的 constructor 中获取是否引用
 path.traverse({
-  Identifier: childPath =>  {
-    if (!childPath.findParent(p => p.isVariableDeclarator() || p.isFunctionDeclaration())) {
+  Identifier: (childPath) => {
+    if (
+      !childPath.findParent(
+        (p) => p.isVariableDeclarator() || p.isFunctionDeclaration()
+      )
+    ) {
       const id = childPath.node.name;
       const binding = this.getBinding(id);
       if (binding) {
@@ -404,11 +410,9 @@ path.traverse({
         binding.referencePaths.push(childPath);
       }
     }
-  }
+  },
 });
 ```
-
-
 
 ## 思考
 
@@ -416,15 +420,14 @@ path.traverse({
 
 ```js
 function traverse(parentPath, key, index) {
-
   // 建立父子关系，并存储子节点的索引和key
   const path = new NodePath(parentPath, key, index);
 
   // 递归逻辑
 
   parent[key].forEach((item, index) => {
-    traverse(path, key, index)
-  })
+    traverse(path, key, index);
+  });
 }
 ```
 
@@ -432,8 +435,8 @@ function traverse(parentPath, key, index) {
 class NodePath {
   constructor(parentPath, key, index) {
     this.parentPath = parentPath;
-    this.key = key
-    this.index = index
+    this.key = key;
+    this.index = index;
   }
 }
 ```

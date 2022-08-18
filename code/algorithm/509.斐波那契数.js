@@ -9,13 +9,12 @@
  * @param {number} n
  * @return {number}
  */
-var m = []
-var fib = function(n) {
-  if (n < 2) return n
+var m = [];
+var fib = function (n) {
+  if (n < 2) return n;
   if (!m[n]) {
-    m[n] = fib(n - 1) + fib(n - 2)
+    m[n] = fib(n - 1) + fib(n - 2);
   }
-  return m[n]
+  return m[n];
 };
 // @lc code=end
-

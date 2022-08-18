@@ -1,5 +1,4 @@
-# husky、eslint、lint-staged配置
-
+# husky、eslint、lint-staged 配置
 
 ```json
 
@@ -29,23 +28,23 @@
     "husky": "^4.3.8",  // 注意这里版本 高版本会不起作用
     "lint-staged": "^11.2.6",
     "prettier": "^2.4.1"
-  
+
 }
 ```
 
 ```json
 // commitlint.config.js
 const types = [
-  'build', 
-  'ci', 
+  'build',
+  'ci',
   'chore',
-  'docs', 
-  'feat', 
-  'fix', 
-  'pref', 
-  'refactor', 
-  'revert', 
-  'style', 
+  'docs',
+  'feat',
+  'fix',
+  'pref',
+  'refactor',
+  'revert',
+  'style',
   'test'
 ];
 
@@ -76,32 +75,29 @@ module.exports = {
 ```jsx
 // .eslintrc.js
 module.exports = {
-  parser: '@typescript-eslint/parser',
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    sourceType: 'module'
+    sourceType: "module",
   },
-  plugins: ['prettier'],
+  plugins: ["prettier"],
   rules: {
-    'no-unused-vars': ['error'],
-    'no-restricted-syntax': [
-      'error',
-      'ObjectExpression > SpreadElement',
-      'ObjectPattern > RestElement',
-      'AwaitExpression'
+    "no-unused-vars": ["error"],
+    "no-restricted-syntax": [
+      "error",
+      "ObjectExpression > SpreadElement",
+      "ObjectPattern > RestElement",
+      "AwaitExpression",
     ],
-    'semi': [
-      'error',
-      'always'
-    ],
-  }
+    semi: ["error", "always"],
+  },
 };
 ```
 
 ```jsx
 // .prettierrc
-semi: true
-singleQuote: true
-printWidth: 80
-trailingComma: 'none'
-arrowParens: 'avoid'
+semi: true;
+singleQuote: true;
+printWidth: 80;
+trailingComma: "none";
+arrowParens: "avoid";
 ```

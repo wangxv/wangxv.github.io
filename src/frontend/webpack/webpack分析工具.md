@@ -1,4 +1,4 @@
-# webpack分析工具
+# webpack 分析工具
 
 ## stats
 
@@ -6,8 +6,8 @@
 // webpack.config.js
 module.exports = {
   // ...
-  profile: true
-}
+  profile: true,
+};
 ```
 
 ```js
@@ -74,6 +74,7 @@ npx webpack-dashboard -- node index.js
 ```
 
 ## UnusedWebpackPlugin
+
 查找未使用的文件
 
 ```js

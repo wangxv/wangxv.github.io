@@ -17,19 +17,18 @@
  * @param {TreeNode} root
  * @return {string[]}
  */
-var binaryTreePaths = function(root) {
-  const res = []
+var binaryTreePaths = function (root) {
+  const res = [];
   function dfs(root, str) {
     // 叶子节点 记录路径
     if (!root.left && !root.right) {
-      res.push(str + root.val)
-      return
+      res.push(str + root.val);
+      return;
     }
-    root.left && dfs(root.left, str + root.val + '->')
-    root.right && dfs(root.right, str + root.val + '->')
+    root.left && dfs(root.left, str + root.val + "->");
+    root.right && dfs(root.right, str + root.val + "->");
   }
-  dfs(root, '')
-  return res
+  dfs(root, "");
+  return res;
 };
 // @lc code=end
-

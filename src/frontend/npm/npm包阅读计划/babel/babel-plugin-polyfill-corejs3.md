@@ -1,35 +1,38 @@
 # babel-plugin-polyfill-corejs3
 
-**作用：为代码注入core-js3 的运行时代码**
+**作用：为代码注入 core-js3 的运行时代码**
 
 ```js {87,198}
 // 作用：为代码注入core-js3 的运行时代码
-var _default = (0, _helperDefinePolyfillProvider.default)(function ({
-  getUtils,
-  method,
-  shouldInjectPolyfill,
-  createMetaResolver,
-  debug,
-  babel
-}, {
-  version = 3,
-  proposals,
-  shippedProposals,
-  [runtimeCompat]: {
-    useBabelRuntime,
-    ext = ".js"
-  } = {}
-}) {
-  const isWebpack = babel.caller(caller => (caller == null ? void 0 : caller.name) === "babel-loader");
+var _default = (0, _helperDefinePolyfillProvider.default)(function (
+  { getUtils, method, shouldInjectPolyfill, createMetaResolver, debug, babel },
+  {
+    version = 3,
+    proposals,
+    shippedProposals,
+    [runtimeCompat]: { useBabelRuntime, ext = ".js" } = {},
+  }
+) {
+  const isWebpack = babel.caller(
+    (caller) => (caller == null ? void 0 : caller.name) === "babel-loader"
+  );
   const resolve = createMetaResolver({
     global: _builtInDefinitions.BuiltIns,
     static: _builtInDefinitions.StaticProperties,
-    instance: _builtInDefinitions.InstanceProperties
+    instance: _builtInDefinitions.InstanceProperties,
   });
-  const available = new Set((0, _getModulesListForTargetVersion.default)(version));
+  const available = new Set(
+    (0, _getModulesListForTargetVersion.default)(version)
+  );
 
   function getCoreJSPureBase(useProposalBase) {
-    return useBabelRuntime ? useProposalBase ? `${useBabelRuntime}/core-js` : `${useBabelRuntime}/core-js-stable` : useProposalBase ? "core-js-pure/features" : "core-js-pure/stable";
+    return useBabelRuntime
+      ? useProposalBase
+        ? `${useBabelRuntime}/core-js`
+        : `${useBabelRuntime}/core-js-stable`
+      : useProposalBase
+      ? "core-js-pure/features"
+      : "core-js-pure/stable";
   }
 
   function maybeInjectGlobalImpl(name, utils) {
@@ -45,7 +48,7 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
   function maybeInjectGlobal(names, utils, fallback = true) {
     for (const name of names) {
       if (fallback) {
-        esnextFallback(name, name => maybeInjectGlobalImpl(name, utils));
+        esnextFallback(name, (name) => maybeInjectGlobalImpl(name, utils));
       } else {
         maybeInjectGlobalImpl(name, utils);
       }
@@ -53,21 +56,26 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
   }
 
   function maybeInjectPure(desc, hint, utils, object) {
-    if (desc.pure && !(object && desc.exclude && desc.exclude.includes(object)) && esnextFallback(desc.name, shouldInjectPolyfill)) {
-      const {
-        name
-      } = desc;
+    if (
+      desc.pure &&
+      !(object && desc.exclude && desc.exclude.includes(object)) &&
+      esnextFallback(desc.name, shouldInjectPolyfill)
+    ) {
+      const { name } = desc;
       let useProposalBase = false;
 
-      if (proposals || shippedProposals && name.startsWith("esnext.")) {
+      if (proposals || (shippedProposals && name.startsWith("esnext."))) {
         useProposalBase = true;
       } else if (name.startsWith("es.") && !available.has(name)) {
         useProposalBase = true;
       }
 
       const coreJSPureBase = getCoreJSPureBase(useProposalBase);
-      return utils.injectDefaultImport( // $FlowIgnore, we already guard desc.pure
-      `${coreJSPureBase}/${desc.pure}${ext}`, hint);
+      return utils.injectDefaultImport(
+        // $FlowIgnore, we already guard desc.pure
+        `${coreJSPureBase}/${desc.pure}${ext}`,
+        hint
+      );
     }
   }
 
@@ -103,7 +111,11 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
       const modules = (0, _utils.isCoreJSSource)(meta.source);
       if (!modules) return;
 
-      if (modules.length === 1 && meta.source === (0, _utils.coreJSModule)(modules[0]) && shouldInjectPolyfill(modules[0])) {
+      if (
+        modules.length === 1 &&
+        meta.source === (0, _utils.coreJSModule)(modules[0]) &&
+        shouldInjectPolyfill(modules[0])
+      ) {
         // Avoid infinite loop: do not replace imports with a new copy of
         // themselves.
         debug(null);
@@ -119,9 +131,17 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
       if (!resolved) return;
       let deps = resolved.desc.global;
 
-      if (resolved.kind !== "global" && meta.object && meta.placement === "prototype") {
+      if (
+        resolved.kind !== "global" &&
+        meta.object &&
+        meta.placement === "prototype"
+      ) {
         const low = meta.object.toLowerCase();
-        deps = deps.filter(m => m.includes(low) || _builtInDefinitions.CommonInstanceDependencies.has(m));
+        deps = deps.filter(
+          (m) =>
+            m.includes(low) ||
+            _builtInDefinitions.CommonInstanceDependencies.has(m)
+        );
       }
 
       maybeInjectGlobal(deps, utils);
@@ -130,15 +150,30 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
     usagePure(meta, utils, path) {
       if (meta.kind === "in") {
         if (meta.key === "Symbol.iterator") {
-          path.replaceWith(t.callExpression(utils.injectDefaultImport((0, _utils.coreJSPureHelper)("is-iterable", useBabelRuntime, ext), "isIterable"), [path.node.right]));
+          path.replaceWith(
+            t.callExpression(
+              utils.injectDefaultImport(
+                (0, _utils.coreJSPureHelper)(
+                  "is-iterable",
+                  useBabelRuntime,
+                  ext
+                ),
+                "isIterable"
+              ),
+              [path.node.right]
+            )
+          );
         }
 
         return;
       }
 
-      if (path.parentPath.isUnaryExpression({
-        operator: "delete"
-      })) return;
+      if (
+        path.parentPath.isUnaryExpression({
+          operator: "delete",
+        })
+      )
+        return;
       let isCall;
 
       if (meta.kind === "property") {
@@ -146,7 +181,7 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
         if (!path.isMemberExpression()) return;
         if (!path.isReferenced()) return;
         isCall = path.parentPath.isCallExpression({
-          callee: path.node
+          callee: path.node,
         });
 
         if (meta.key === "Symbol.iterator") {
@@ -154,13 +189,47 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
 
           if (isCall) {
             if (path.parent.arguments.length === 0) {
-              path.parentPath.replaceWith(t.callExpression(utils.injectDefaultImport((0, _utils.coreJSPureHelper)("get-iterator", useBabelRuntime, ext), "getIterator"), [path.node.object]));
+              path.parentPath.replaceWith(
+                t.callExpression(
+                  utils.injectDefaultImport(
+                    (0, _utils.coreJSPureHelper)(
+                      "get-iterator",
+                      useBabelRuntime,
+                      ext
+                    ),
+                    "getIterator"
+                  ),
+                  [path.node.object]
+                )
+              );
               path.skip();
             } else {
-              (0, _utils.callMethod)(path, utils.injectDefaultImport((0, _utils.coreJSPureHelper)("get-iterator-method", useBabelRuntime, ext), "getIteratorMethod"));
+              (0, _utils.callMethod)(
+                path,
+                utils.injectDefaultImport(
+                  (0, _utils.coreJSPureHelper)(
+                    "get-iterator-method",
+                    useBabelRuntime,
+                    ext
+                  ),
+                  "getIteratorMethod"
+                )
+              );
             }
           } else {
-            path.replaceWith(t.callExpression(utils.injectDefaultImport((0, _utils.coreJSPureHelper)("get-iterator-method", useBabelRuntime, ext), "getIteratorMethod"), [path.node.object]));
+            path.replaceWith(
+              t.callExpression(
+                utils.injectDefaultImport(
+                  (0, _utils.coreJSPureHelper)(
+                    "get-iterator-method",
+                    useBabelRuntime,
+                    ext
+                  ),
+                  "getIteratorMethod"
+                ),
+                [path.node.object]
+              )
+            );
           }
 
           return;
@@ -170,12 +239,16 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
       let resolved = resolve(meta);
       if (!resolved) return;
 
-      if (useBabelRuntime && resolved.desc.pure && resolved.desc.pure.slice(-6) === "/index") {
+      if (
+        useBabelRuntime &&
+        resolved.desc.pure &&
+        resolved.desc.pure.slice(-6) === "/index"
+      ) {
         // Remove /index, since it doesn't exist in @babel/runtime-corejs3s
         resolved = _extends({}, resolved, {
           desc: _extends({}, resolved.desc, {
-            pure: resolved.desc.pure.slice(0, -6)
-          })
+            pure: resolved.desc.pure.slice(0, -6),
+          }),
         });
       }
 
@@ -183,12 +256,20 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
         const id = maybeInjectPure(resolved.desc, resolved.name, utils);
         if (id) path.replaceWith(id);
       } else if (resolved.kind === "static") {
-        const id = maybeInjectPure(resolved.desc, resolved.name, utils, // $FlowIgnore
-        meta.object);
+        const id = maybeInjectPure(
+          resolved.desc,
+          resolved.name,
+          utils, // $FlowIgnore
+          meta.object
+        );
         if (id) path.replaceWith(id);
       } else if (resolved.kind === "instance") {
-        const id = maybeInjectPure(resolved.desc, `${resolved.name}InstanceProperty`, utils, // $FlowIgnore
-        meta.object);
+        const id = maybeInjectPure(
+          resolved.desc,
+          `${resolved.name}InstanceProperty`,
+          utils, // $FlowIgnore
+          meta.object
+        );
         if (!id) return;
 
         if (isCall) {
@@ -208,7 +289,10 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
 
           if (isWebpack) {
             // Webpack uses Promise.all to handle dynamic import.
-            maybeInjectGlobal(_builtInDefinitions.PromiseDependenciesWithIterators, utils);
+            maybeInjectGlobal(
+              _builtInDefinitions.PromiseDependenciesWithIterators,
+              utils
+            );
           } else {
             maybeInjectGlobal(_builtInDefinitions.PromiseDependencies, utils);
           }
@@ -218,7 +302,10 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
       // (async function () { }).finally(...)
       Function(path) {
         if (path.node.async) {
-          maybeInjectGlobal(_builtInDefinitions.PromiseDependencies, getUtils(path));
+          maybeInjectGlobal(
+            _builtInDefinitions.PromiseDependencies,
+            getUtils(path)
+          );
         }
       },
 
@@ -230,18 +317,23 @@ var _default = (0, _helperDefinePolyfillProvider.default)(function ({
       // [...spread]
       SpreadElement(path) {
         if (!path.parentPath.isObjectExpression()) {
-          maybeInjectGlobal(_builtInDefinitions.CommonIterators, getUtils(path));
+          maybeInjectGlobal(
+            _builtInDefinitions.CommonIterators,
+            getUtils(path)
+          );
         }
       },
 
       // yield*
       YieldExpression(path) {
         if (path.node.delegate) {
-          maybeInjectGlobal(_builtInDefinitions.CommonIterators, getUtils(path));
+          maybeInjectGlobal(
+            _builtInDefinitions.CommonIterators,
+            getUtils(path)
+          );
         }
-      }
-
-    }
+      },
+    },
   };
 });
 ```

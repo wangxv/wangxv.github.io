@@ -17,17 +17,16 @@
  * @param {number} val
  * @return {ListNode}
  */
-var removeElements = function(head, val) {
-  let ret = new ListNode(-1, head)
-  let cur = ret
-  while(cur.next) {
+var removeElements = function (head, val) {
+  let ret = new ListNode(-1, head);
+  let cur = ret;
+  while (cur.next) {
     if (cur.next.val === val) {
-      cur.next = cur.next.next
-      continue
+      cur.next = cur.next.next;
+      continue;
     }
-    cur = cur.next
+    cur = cur.next;
   }
-  return ret.next
+  return ret.next;
 };
 // @lc code=end
-

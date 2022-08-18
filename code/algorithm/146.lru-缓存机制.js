@@ -8,49 +8,49 @@
 /**
  * @param {number} capacity
  */
-var LRUCache = function(capacity) {
-  this.capacity = capacity
-  this.map = new Map()
+var LRUCache = function (capacity) {
+  this.capacity = capacity;
+  this.map = new Map();
 };
 
-/** 
+/**
  * @param {number} key
  * @return {number}
  */
-LRUCache.prototype.get = function(key) {
+LRUCache.prototype.get = function (key) {
   if (this.map.has(key)) {
     // 先获取值
-    let temp = this.map.get(key)
+    let temp = this.map.get(key);
 
     // 删除key
-    this.map.delete(key)
+    this.map.delete(key);
 
     // 添加key
-    this.map.set(key, temp)
-    return temp
+    this.map.set(key, temp);
+    return temp;
   } else {
-    return -1
+    return -1;
   }
 };
 
-/** 
- * @param {number} key 
+/**
+ * @param {number} key
  * @param {number} value
  * @return {void}
  */
-LRUCache.prototype.put = function(key, value) {
+LRUCache.prototype.put = function (key, value) {
   // 不管有没有 先删掉这个key
   if (this.map.has(key)) {
-    this.map.delete(key)
+    this.map.delete(key);
   }
 
   // 设置key-value
-  this.map.set(key, value)
+  this.map.set(key, value);
 
   // 超过了最大容量
   if (this.map.size > this.capacity) {
     // 删除最早的key
-    this.map.delete(this.map.keys().next().value)
+    this.map.delete(this.map.keys().next().value);
   }
 };
 
@@ -61,4 +61,3 @@ LRUCache.prototype.put = function(key, value) {
  * obj.put(key,value)
  */
 // @lc code=end
-

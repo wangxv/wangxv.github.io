@@ -19,14 +19,15 @@
  */
 
 function getDeep(root) {
-  if (!root) return 0
-  const leftHeight = getDeep(root.left)
-  const rightHeight = getDeep(root.right)
-  if (leftHeight === -1 || rightHeight === -1) return -1
-  return Math.abs(leftHeight - rightHeight) > 1 ? -1 : Math.max(leftHeight, rightHeight) + 1
+  if (!root) return 0;
+  const leftHeight = getDeep(root.left);
+  const rightHeight = getDeep(root.right);
+  if (leftHeight === -1 || rightHeight === -1) return -1;
+  return Math.abs(leftHeight - rightHeight) > 1
+    ? -1
+    : Math.max(leftHeight, rightHeight) + 1;
 }
-var isBalanced = function(root) {
-  return getDeep(root) !== -1
+var isBalanced = function (root) {
+  return getDeep(root) !== -1;
 };
 // @lc code=end
-

@@ -1,4 +1,4 @@
-# Vite源码阅读笔记
+# Vite 源码阅读笔记
 
 ## 一、 框架设计
 
@@ -23,15 +23,16 @@ try {
   process.exit(1)
 }
 ```
-1. 通过logLevel控制日志展示哪些信息
+
+1. 通过 logLevel 控制日志展示哪些信息
 2. 在入口处`try catch`
 
-  ```js
-  createLogger(options.logLevel).error(
-    chalk.red(`error when starting dev server:\n${e.stack}`)
-  )
-  process.exit(1)
-  ```
+```js
+createLogger(options.logLevel).error(
+  chalk.red(`error when starting dev server:\n${e.stack}`)
+);
+process.exit(1);
+```
 
 #### 1.1.1、 实现
 
@@ -165,70 +166,68 @@ export function createLogger(
   return logger
 }
 ```
+
 :::
 
 ### 1.2、debug
+
 ```ts
-import debug from 'debug'
+import debug from "debug";
 interface DebuggerOptions {
-  onlyWhenFocused?: boolean | string
+  onlyWhenFocused?: boolean | string;
 }
 
-const filter = process.env.VITE_DEBUG_FILTER
-const DEBUG = process.env.DEBUG
+const filter = process.env.VITE_DEBUG_FILTER;
+const DEBUG = process.env.DEBUG;
 
 export function createDebugger(
   ns: string,
   options: DebuggerOptions = {}
-): debug.Debugger['log'] {
-  const log = debug(ns)
-  const { onlyWhenFocused } = options
-  const focus = typeof onlyWhenFocused === 'string' ? onlyWhenFocused : ns
+): debug.Debugger["log"] {
+  const log = debug(ns);
+  const { onlyWhenFocused } = options;
+  const focus = typeof onlyWhenFocused === "string" ? onlyWhenFocused : ns;
   return (msg: string, ...args: any[]) => {
     if (filter && !msg.includes(filter)) {
-      return
+      return;
     }
     if (onlyWhenFocused && !DEBUG?.includes(focus)) {
-      return
+      return;
     }
-    log(msg, ...args)
-  }
+    log(msg, ...args);
+  };
 }
 ```
 
 ```ts
-const debugResolve = createDebugger('vite:resolve')
+const debugResolve = createDebugger("vite:resolve");
 debugResolve(
   `${timeFrom(resolveStart)} ${chalk.cyan(rawId)} -> ${chalk.dim(id)}`
-)
+);
 ```
 
-### 1.3、如何实现基于rollup的插件系统
+### 1.3、如何实现基于 rollup 的插件系统
+
 ```ts
 import {
   // ...
   PluginContext as RollupPluginContext,
-} from 'rollup' // 底层基于rollup
+} from "rollup"; // 底层基于rollup
 
 export async function createPluginContainer(
   { plugins, logger, root, build: { rollupOptions } }: ResolvedConfig,
   watcher?: FSWatcher
 ): Promise<PluginContainer> {
+  // 覆盖和增加一些 插件上下文方法
+  class Context implements PluginContext {}
 
   // 覆盖和增加一些 插件上下文方法
-  class Context implements PluginContext {
-
-  }
-
-  // 覆盖和增加一些 插件上下文方法
-  class TransformContext extends Context {
-
-  }
+  class TransformContext extends Context {}
 
   // 覆盖和增加一些 插件方法
   const container: PluginContainer = {
     // ...
-  }
+  };
 }
 ```
 
@@ -237,25 +236,25 @@ export async function createPluginContainer(
 ### 初始化阶段
 
 1. `resolveConfig`解析配置文件与默认配置合并
+
 ```js
 
 ```
 
 2. `resolveHttpsConfig`解析`https`配置
-3. 使用`http`模块创建Server，并初始化一些`middlewares`
-4. `createWebSocketServer`创建WebSocket，主要用于hmr
-5. `createPluginContainer` 创建插件容器，用于覆盖rollup的插件hook实现
-6. 生成server配置
+3. 使用`http`模块创建 Server，并初始化一些`middlewares`
+4. `createWebSocketServer`创建 WebSocket，主要用于 hmr
+5. `createPluginContainer` 创建插件容器，用于覆盖 rollup 的插件 hook 实现
+6. 生成 server 配置
 7. 监听文件变化，例如文件删除，修改，增加等
 
-
-
-## Hook执行
+## Hook 执行
 
 ### 1. configureServer
 
 执行插件：
-+ cssPlugin
+
+- cssPlugin
 
   ```js
   configureServer(_server) {
@@ -263,7 +262,7 @@ export async function createPluginContainer(
   }
   ```
 
-+ esbuildPlugin
+- esbuildPlugin
 
   ```js
   configureServer(_server) {
@@ -275,7 +274,7 @@ export async function createPluginContainer(
   }
   ```
 
-+ importAnalysisPlugin
+- importAnalysisPlugin
 
   ```js
   configureServer(_server) {
@@ -283,7 +282,7 @@ export async function createPluginContainer(
   }
   ```
 
-+ preAliasPlugin
+- preAliasPlugin
 
   ```js
   configureServer(_server) {
@@ -291,19 +290,19 @@ export async function createPluginContainer(
   }
   ```
 
-+ resolvePlugin
+- resolvePlugin
 
   ```js
   configureServer(_server) {
     server = _server
   }
   ```
-
 
 ### 2. buildStart
 
 执行插件：
-+ assetPlugin
+
+- assetPlugin
 
   ```js
   buildStart() {
@@ -312,7 +311,7 @@ export async function createPluginContainer(
   }
   ```
 
-+ cssPlugin
+- cssPlugin
 
   ```js
   buildStart() {
@@ -324,7 +323,7 @@ export async function createPluginContainer(
   }
   ```
 
-+ dataURIPlugin
+- dataURIPlugin
 
   ```js
   buildStart() {
@@ -332,14 +331,12 @@ export async function createPluginContainer(
   }
   ```
 
-+ htmlInlineScriptProxyPlugin
+- htmlInlineScriptProxyPlugin
 
   ```js
   buildStart() {
     htmlProxyMap.set(config, new Map())
   }
   ```
-
-
 
 ## 优化依赖

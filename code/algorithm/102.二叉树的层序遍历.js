@@ -17,25 +17,24 @@
  * @param {TreeNode} root
  * @return {number[][]}
  */
-var levelOrder = function(root) {
-  if (!root) return []
-  const queue = [root]
-  const res = []
-  while(queue.length) {
-    const arr = []
-    const length = queue.length
-    for (let i = 0;i < length;i++) {
-      const node = queue.shift()
-      arr.push(node.val)
-      node.left && queue.push(node.left)
-      node.right && queue.push(node.right)
+var levelOrder = function (root) {
+  if (!root) return [];
+  const queue = [root];
+  const res = [];
+  while (queue.length) {
+    const arr = [];
+    const length = queue.length;
+    for (let i = 0; i < length; i++) {
+      const node = queue.shift();
+      arr.push(node.val);
+      node.left && queue.push(node.left);
+      node.right && queue.push(node.right);
     }
-    res.push(arr)
+    res.push(arr);
   }
-  return res
+  return res;
 };
 // @lc code=end
-
 
 // @after-stub-for-debug-begin
 module.exports = levelOrder;

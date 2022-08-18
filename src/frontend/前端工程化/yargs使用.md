@@ -1,4 +1,4 @@
-# yargs使用
+# yargs 使用
 
 ```js
 #!/usr/bin/env node
@@ -67,5 +67,5 @@ cli
 // 选项：
 // -r, --registry  定义全局仓库地址                                                                                                       [字符串] [默认值: www.baidu.com]
 // -h, --help      显示帮助信息                                                                                                                                     [布尔]
-// -v, --version   显示版本号     
+// -v, --version   显示版本号
 ```

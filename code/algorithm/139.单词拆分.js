@@ -10,14 +10,17 @@
  * @param {string[]} wordDict
  * @return {boolean}
  */
-var wordBreak = function(s, wordDict) {
+var wordBreak = function (s, wordDict) {
   let dp = Array(s.length + 1).fill(false);
   dp[0] = true;
-  for (let i = 0;i <= s.length;i++) {
-    for (let j = 0;j < wordDict.length;j++) {
+  for (let i = 0; i <= s.length; i++) {
+    for (let j = 0; j < wordDict.length; j++) {
       if (i >= wordDict[j].length) {
-        if (s.slice(i - wordDict[j].length, i) === wordDict[j] && dp[i - wordDict[j].length]) {
-          dp[i] = true
+        if (
+          s.slice(i - wordDict[j].length, i) === wordDict[j] &&
+          dp[i - wordDict[j].length]
+        ) {
+          dp[i] = true;
         }
       }
     }
@@ -25,4 +28,3 @@ var wordBreak = function(s, wordDict) {
   return dp[s.length];
 };
 // @lc code=end
-

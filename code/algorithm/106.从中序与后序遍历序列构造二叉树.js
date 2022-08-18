@@ -18,16 +18,18 @@
  * @param {number[]} postorder
  * @return {TreeNode}
  */
-var buildTree = function(inorder, postorder) {
+var buildTree = function (inorder, postorder) {
   if (!inorder.length && !postorder.length) {
-      return null
+    return null;
   }
-  const val = postorder[postorder.length - 1]
-  const node = new TreeNode(val)
-  const mid = inorder.indexOf(val)
-  node.left = buildTree(inorder.slice(0, mid), postorder.slice(0, mid))
-  node.right = buildTree(inorder.slice(mid + 1), postorder.slice(mid, postorder.length - 1))
-  return node
+  const val = postorder[postorder.length - 1];
+  const node = new TreeNode(val);
+  const mid = inorder.indexOf(val);
+  node.left = buildTree(inorder.slice(0, mid), postorder.slice(0, mid));
+  node.right = buildTree(
+    inorder.slice(mid + 1),
+    postorder.slice(mid, postorder.length - 1)
+  );
+  return node;
 };
 // @lc code=end
-

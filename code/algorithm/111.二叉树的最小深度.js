@@ -17,15 +17,14 @@
  * @param {TreeNode} root
  * @return {number}
  */
-var minDepth = function(root) {
-  if (!root) return 0
+var minDepth = function (root) {
+  if (!root) return 0;
   if (!root.left && root.right) {
-    return 1 + minDepth(root.right)
+    return 1 + minDepth(root.right);
   }
   if (root.left && !root.right) {
-    return 1 + minDepth(root.left)
+    return 1 + minDepth(root.left);
   }
-  return Math.min(minDepth(root.left), minDepth(root.right)) + 1
+  return Math.min(minDepth(root.left), minDepth(root.right)) + 1;
 };
 // @lc code=end
-

@@ -1,5 +1,4 @@
-# flex各种值的含义
-
+# flex 各种值的含义
 
 ## flex: none
 
@@ -10,7 +9,6 @@
   flex-basis: auto;
 }
 ```
-
 
 ## flex: auto
 

@@ -9,8 +9,5 @@
  * @param {number} n
  * @return {number}
  */
-var numTrees = function(n) {
-
-};
+var numTrees = function (n) {};
 // @lc code=end
-

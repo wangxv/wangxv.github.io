@@ -16,28 +16,27 @@
  * @param {ListNode} head
  * @return {ListNode}
  */
-var swapPairs = function(head) {
-  const node = new ListNode(-1, head)
-  const ret = node
-  let temp = node
+var swapPairs = function (head) {
+  const node = new ListNode(-1, head);
+  const ret = node;
+  let temp = node;
   // 保证后面有两个节点能进行交换
-  while(temp.next && temp.next.next) {
+  while (temp.next && temp.next.next) {
     // 第一个节点
-    let pre = temp.next
+    let pre = temp.next;
     // 第二个节点
-    let cur = temp.next.next
+    let cur = temp.next.next;
 
     // 第一个节点 连接 第三个节点
-    pre.next = cur.next
+    pre.next = cur.next;
     // 第二个节点连接 第一个节点
-    cur.next = pre
+    cur.next = pre;
     // 开始节点 连接 第二个节点
-    temp.next = cur
+    temp.next = cur;
 
     // 指针移动
-    temp = pre
+    temp = pre;
   }
-  return ret.next
+  return ret.next;
 };
 // @lc code=end
-

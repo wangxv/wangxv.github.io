@@ -17,19 +17,18 @@
  * @param {TreeNode} root
  * @return {number}
  */
-var sumOfLeftLeaves = function(root) {
-  if (!root) return 0
-  let val = 0
+var sumOfLeftLeaves = function (root) {
+  if (!root) return 0;
+  let val = 0;
   if (root.left && !root.left.left && !root.left.right) {
-    val = root.left.val
+    val = root.left.val;
   }
-  const leftSum = sumOfLeftLeaves(root.left)
-  const rightSum = sumOfLeftLeaves(root.right)
+  const leftSum = sumOfLeftLeaves(root.left);
+  const rightSum = sumOfLeftLeaves(root.right);
 
-  return val + leftSum + rightSum
+  return val + leftSum + rightSum;
 };
 // @lc code=end
-
 
 // @after-stub-for-debug-begin
 module.exports = sumOfLeftLeaves;

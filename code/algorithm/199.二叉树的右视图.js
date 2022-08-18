@@ -17,22 +17,21 @@
  * @param {TreeNode} root
  * @return {number[]}
  */
-var rightSideView = function(root) {
-  if (!root) return []
-  const queue = [root]
-  const res = []
-  while(queue.length) {
-    const arr = []
-    const length = queue.length
-    for (let i = 0;i < length;i++) {
-      const node = queue.shift()
-      arr.push(node.val)
-      node.left && queue.push(node.left)
-      node.right && queue.push(node.right)
+var rightSideView = function (root) {
+  if (!root) return [];
+  const queue = [root];
+  const res = [];
+  while (queue.length) {
+    const arr = [];
+    const length = queue.length;
+    for (let i = 0; i < length; i++) {
+      const node = queue.shift();
+      arr.push(node.val);
+      node.left && queue.push(node.left);
+      node.right && queue.push(node.right);
     }
-    res.push(arr[arr.length - 1])
+    res.push(arr[arr.length - 1]);
   }
-  return res
+  return res;
 };
 // @lc code=end
-

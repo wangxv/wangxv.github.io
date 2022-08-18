@@ -1,4 +1,5 @@
-# JS沙箱
+# JS 沙箱
+
 在`qiankun`的实现中，包含了两种沙箱，分别为`基于Proxy实现的沙箱`和`快照沙箱`，当浏览器不支持`Proxy`会降级为`快照沙箱`
 
 ```mermaid
@@ -11,8 +12,7 @@ flowchart TB;
   end
 ```
 
-
-## Proxy沙箱
+## Proxy 沙箱
 
 ```js
 export default class ProxySandbox implements SandBox {
@@ -62,12 +62,13 @@ export default class ProxySandbox implements SandBox {
   }
 }
 ```
+
 以上就是`Proxy沙箱的大致实现`，代码量不多，但是也有一些关键信息：
 
-+ `constructor`中会创建window对象的Proxy
-+ `active`会激活沙箱, 一般在`mount`时会调用该方法
-+ `inactive`会使沙箱失活，一般在`unmount`阶段会调用该方法
-+ `get`和`set`，则会对值的设置和获取做一些处理，并且不会影响到原始的window
+- `constructor`中会创建 window 对象的 Proxy
+- `active`会激活沙箱, 一般在`mount`时会调用该方法
+- `inactive`会使沙箱失活，一般在`unmount`阶段会调用该方法
+- `get`和`set`，则会对值的设置和获取做一些处理，并且不会影响到原始的 window
 
 ### 1.初始化阶段
 
@@ -90,17 +91,19 @@ constructor(name: string) {
 ```
 
 在初始化的阶段我们并不需要关心`proxy`是怎么实现的，我们只需要知道它做了这些事
-1. 初始化一些`name`，`type`属性，这些并不重要，是qiankun内部使用
-2. 创建伪造的window对象，createFakeWindow做的事情比较简单，只是返回了`fakeWindow`和`propertiesWithGetter`
-    + `fakeWindow` 伪造的window对象
-    + `propertiesWithGetter` 判断属性是否有getter，如果存在将不会使用`fakeWindow`上的属性值
 
-    注意：如果原始对象的属性存在属性描述符，则会调用Object.defineProperty复用属性描述符
+1. 初始化一些`name`，`type`属性，这些并不重要，是 qiankun 内部使用
+2. 创建伪造的 window 对象，createFakeWindow 做的事情比较简单，只是返回了`fakeWindow`和`propertiesWithGetter`
 
-3. 基于`fakeWindow`创建Proxy对象
+   - `fakeWindow` 伪造的 window 对象
+   - `propertiesWithGetter` 判断属性是否有 getter，如果存在将不会使用`fakeWindow`上的属性值
 
+   注意：如果原始对象的属性存在属性描述符，则会调用 Object.defineProperty 复用属性描述符
+
+3. 基于`fakeWindow`创建 Proxy 对象
 
 ### 2.激活沙箱
+
 设置当前沙箱处于运行中，并统计激活沙箱数量
 
 ```js
@@ -110,7 +113,8 @@ active() {
 }
 ```
 
-### 3.触发Setter
+### 3.触发 Setter
+
 ```js
 set: (target: FakeWindow, p: PropertyKey, value: any): boolean => {
   // 沙箱处于运行中 才能赋值
@@ -157,13 +161,15 @@ set: (target: FakeWindow, p: PropertyKey, value: any): boolean => {
   return true;
 },
 ```
+
 `setter`做的事情比较简单，首先处于运行中的沙箱，它的`fakeWindow`才能被修改，其次有如下的步骤
+
 1. 判断当前要设置的属性，如果`fakeWindow`不存在 而 原始的`window`存在该属性，代表已经被删除，需要重新设置属性描述符
 2. 不满足以上条件，直接修改`fakeWindow`即可
 3. 判断当前属性是否在白名单中，如果在则该属性的修改，将会直接影响到`rawWindow`
 
+### 3.触发 Getter
 
-### 3.触发Getter
 ```js
 get(target: FakeWindow, p: PropertyKey): any {
   if (p === Symbol.unscopables) return unscopables;
@@ -232,14 +238,14 @@ get(target: FakeWindow, p: PropertyKey): any {
 
 **这是为了防止，我们通过这样的方式去获取`rawWindow`，而直接修改它的值。**
 
-2. 标记正在执行的沙箱，为什么访问`document`的时候才会进行标记呢？因为页面的渲染一定会伴随各种dom操作，所以在这个时候标记，是能够记录下正在执行的沙箱，
-  当宏任务执行完毕，代表首次渲染完成时，又会把标记清除掉。
-  **为什么标记？原因是为了让我们在首次渲染过程中，能够拿到当前的沙箱对象，获取其中的属性值**
+2. 标记正在执行的沙箱，为什么访问`document`的时候才会进行标记呢？因为页面的渲染一定会伴随各种 dom 操作，所以在这个时候标记，是能够记录下正在执行的沙箱，
+   当宏任务执行完毕，代表首次渲染完成时，又会把标记清除掉。
+   **为什么标记？原因是为了让我们在首次渲染过程中，能够拿到当前的沙箱对象，获取其中的属性值**
 
 3. 返回属性值
 
-
 ### 4. 失活沙箱
+
 ```js
 inactive() {
   if (--activeSandboxCount === 0) {
@@ -253,10 +259,10 @@ inactive() {
   this.sandboxRunning = false;
 }
 ```
+
 该方法将会在`unmount`时调用，如果当前失活的沙箱是最后一个沙箱，它会删除掉白名单中`rawWindow`上的属性，并设置`sandboxRunning = false`
 
-
-## Legacy沙箱
+## Legacy 沙箱
 
 ```js
 /**
@@ -304,10 +310,10 @@ export default class SingularProxySandbox implements SandBox {
 }
 ```
 
-`LegacySandbox`只有在配置`sandbox.loose`才会起作用，该沙箱虽然也是基于Proxy实现的，但是它会直接修改或获取`rawWindow`的属性,其实现与快照沙箱比较相似，在激活和失活时，会对`window`进行恢复和还原。
-
+`LegacySandbox`只有在配置`sandbox.loose`才会起作用，该沙箱虽然也是基于 Proxy 实现的，但是它会直接修改或获取`rawWindow`的属性,其实现与快照沙箱比较相似，在激活和失活时，会对`window`进行恢复和还原。
 
 ### 1. 初始化阶段
+
 ```js
 constructor(name: string) {
   this.name = name;
@@ -325,14 +331,15 @@ constructor(name: string) {
   this.proxy = proxy;
 }
 ```
+
 该阶段会初始化一些对象，并代理`fakeWindow`，需要注意的点
 
-+ addedPropsMapInSandbox：`inactive`时会使用，用于重置`window`，删除掉被添加的属性。
-+ modifiedPropsOriginalValueMapInSandbox：`inactive`时会使用，重置`window`, 恢复到一开始的状态
-+ currentUpdatedPropsValueMap: `active`时会使用，重新设置`window`，恢复到上次更新状态
-
+- addedPropsMapInSandbox：`inactive`时会使用，用于重置`window`，删除掉被添加的属性。
+- modifiedPropsOriginalValueMapInSandbox：`inactive`时会使用，重置`window`, 恢复到一开始的状态
+- currentUpdatedPropsValueMap: `active`时会使用，重新设置`window`，恢复到上次更新状态
 
 ### 2.激活沙箱
+
 ```js
 active() {
   if (!this.sandboxRunning) {
@@ -341,10 +348,10 @@ active() {
   this.sandboxRunning = true;
 }
 ```
+
 通过`currentUpdatedPropsValueMap`重新设置`window`对象
 
-
-### 3.触发Setter
+### 3.触发 Setter
 
 ```js
 set: (_: Window, p: PropertyKey, value: any): boolean => {
@@ -375,13 +382,14 @@ set: (_: Window, p: PropertyKey, value: any): boolean => {
   return true;
 }
 ```
-当触发Setter时，会更新三个Map
-+ 判断相对于`rawWindow`是否是新增属性，如果是则添加属性和值到`addedPropsMapInSandbox`
-+ `modifiedPropsOriginalValueMapInSandbox`如果没有记录过更新的`key`, 则记录该属性的初始值用于恢复。
-+ `currentUpdatedPropsValueMap` 记录当前更新的属性和值
 
+当触发 Setter 时，会更新三个 Map
 
-### 4. 触发Getter
+- 判断相对于`rawWindow`是否是新增属性，如果是则添加属性和值到`addedPropsMapInSandbox`
+- `modifiedPropsOriginalValueMapInSandbox`如果没有记录过更新的`key`, 则记录该属性的初始值用于恢复。
+- `currentUpdatedPropsValueMap` 记录当前更新的属性和值
+
+### 4. 触发 Getter
 
 ```js
 get(_: Window, p: PropertyKey): any {
@@ -393,9 +401,11 @@ get(_: Window, p: PropertyKey): any {
   return getTargetValue(rawWindow, value);
 },
 ```
+
 和`Proxy沙箱`类似，也会处理`window.top`, `window.window`等情况
 
 ### 5.失活沙箱
+
 ```js
 inactive() {
   this.modifiedPropsOriginalValueMapInSandbox.forEach((v, p) => setWindowProp(p, v));
@@ -404,10 +414,10 @@ inactive() {
   this.sandboxRunning = false;
 }
 ```
+
 失活沙箱的实现就不多赘述了，懂得都懂~
 
-
-## Snapshot沙箱
+## Snapshot 沙箱
 
 ```js
 function iter(obj: typeof window, callbackFn: (prop: any) => void) {
@@ -475,6 +485,7 @@ export default class SnapshotSandbox implements SandBox {
   }
 }
 ```
+
 相比基于`Proxy`实现的沙箱，`SnapshotSandbox`实现非常简洁，只有`active`和`inactive`状态变化，可以用一个流程图来表示
 
 ```mermaid

@@ -4,29 +4,29 @@
  * @LastEditors: VSCode
  * @LastEditTime: 2022-02-18 21:32:41
  * @FilePath: /fyh-blog/src/.vuepress/config.js
- * @Description: 
- * 
- * Copyright (c) 2022 by fanyihui/tuhu, All Rights Reserved. 
+ * @Description:
+ *
+ * Copyright (c) 2022 by fanyihui/tuhu, All Rights Reserved.
  */
 
-const path = require('path')
-const sidebar = require('./sidebar').sidebar
-const { hopeTheme } = require('vuepress-theme-hope')
-const { searchPlugin } = require('@vuepress/plugin-search')
+const path = require("path");
+const sidebar = require("./sidebar").sidebar;
+const { hopeTheme } = require("vuepress-theme-hope");
+const { searchPlugin } = require("@vuepress/plugin-search");
 
 module.exports = {
-  title: 'fyhub’s blog',
-  description: '博客',
-  dest: path.resolve(__dirname, '../../docs'),
-  base: '/',
+  title: "fyhub’s blog",
+  description: "博客",
+  dest: path.resolve(__dirname, "../../docs"),
+  base: "/",
   plugins: [
     searchPlugin({
       locales: {
-        '/': {
-          placeholder: 'Search',
+        "/": {
+          placeholder: "Search",
         },
-        '/zh/': {
-          placeholder: '搜索',
+        "/zh/": {
+          placeholder: "搜索",
         },
       },
     }),
@@ -35,11 +35,11 @@ module.exports = {
     repo: "fyhhub/fyhhub.github.io",
     repoLabel: "GitHub",
     repoDisplay: true,
-    lastUpdated: '最后更新时间',
+    lastUpdated: "最后更新时间",
     editLink: false,
     contributors: false,
     sidebar,
-    navbar: require('./sidebar').nav,
+    navbar: require("./sidebar").nav,
     themeColor: {
       blue: "#2196f3",
       red: "#f26d6d",
@@ -48,12 +48,12 @@ module.exports = {
     },
     plugins: {
       comment: {
-        provider: 'Giscus',
-        repo: 'fyhhub/fyhhub.github.io',
-        repoId: 'R_kgDOGcGXUw',
-        category: 'General',
-        categoryId: 'DIC_kwDOGcGXU84CQ1aV',
-        inputPosition: 'bottom'
+        provider: "Giscus",
+        repo: "fyhhub/fyhhub.github.io",
+        repoId: "R_kgDOGcGXUw",
+        category: "General",
+        categoryId: "DIC_kwDOGcGXU84CQ1aV",
+        inputPosition: "bottom",
       },
       mdEnhance: {
         demo: true,
@@ -62,16 +62,19 @@ module.exports = {
         tasklist: true,
         playground: true,
         mermaid: true,
-        mark: true
+        mark: true,
       },
-      photoSwipe: true
-    }
+      photoSwipe: true,
+    },
   }),
   markdown: {
-    lineNumbers: true
+    lineNumbers: true,
   },
   head: [
-    ['script', {} , `
+    [
+      "script",
+      {},
+      `
     var hm1
     (function() {
       hm1 = document.createElement("script");
@@ -85,6 +88,7 @@ module.exports = {
       gtag('js', new Date());
       gtag('config', 'G-BWGLYWG03M');
     }
-  `]
-  ]
-}
+  `,
+    ],
+  ],
+};

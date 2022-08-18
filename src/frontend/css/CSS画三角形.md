@@ -1,6 +1,7 @@
-# CSS画三角形
+# CSS 画三角形
 
-::: normal-demo CSS画三角形
+::: normal-demo CSS 画三角形
+
 ```html
 <div>
   <div class="triangle"></div>
@@ -11,7 +12,7 @@
 .triangle {
   width: 0;
   height: 0;
-  border-style:solid;
+  border-style: solid;
   /* 上 右 左 边框宽度50 下 0 */
   border-width: 0 50px 50px 50px;
   /* 上 右 左 透明色 */
@@ -20,4 +21,3 @@
 ```
 
 :::
-

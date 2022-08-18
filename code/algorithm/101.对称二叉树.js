@@ -19,13 +19,16 @@
  */
 function isMirror(n1, n2) {
   if (n1 && n2) {
-    return n1.val === n2.val && isMirror(n1.left, n2.right) && isMirror(n1.right, n2.left)
+    return (
+      n1.val === n2.val &&
+      isMirror(n1.left, n2.right) &&
+      isMirror(n1.right, n2.left)
+    );
   } else {
-    return !n1 && !n2
+    return !n1 && !n2;
   }
 }
-var isSymmetric = function(root) {
-  return isMirror(root.left, root.right)
+var isSymmetric = function (root) {
+  return isMirror(root.left, root.right);
 };
 // @lc code=end
-

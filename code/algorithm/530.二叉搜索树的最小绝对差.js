@@ -18,20 +18,19 @@
  * @return {number}
  */
 
-var getMinimumDifference = function(root) {
-  var pre
-  var min = Number.MAX_VALUE
+var getMinimumDifference = function (root) {
+  var pre;
+  var min = Number.MAX_VALUE;
   function dfs(root) {
     if (!root) return;
-    dfs(root.left) // 左
+    dfs(root.left); // 左
     if (pre != null) {
-      min = Math.min(min, root.val - pre)
+      min = Math.min(min, root.val - pre);
     }
-    pre = root.val
-    dfs(root.right)
+    pre = root.val;
+    dfs(root.right);
   }
-  dfs(root)
-  return min
+  dfs(root);
+  return min;
 };
 // @lc code=end
-
