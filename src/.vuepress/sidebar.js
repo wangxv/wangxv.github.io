@@ -17,6 +17,7 @@ const nav = [
       { text: '前端工程化', link: '/frontend-engineering/' },
     ],
   },
+  { text: "开发工具", link: "/tools/" },
   { text: "算法", link: "/algorithm/" },
   { text: "计算机基础", link: "/basic/" },
   { text: "随笔", link: "/informal/" },
