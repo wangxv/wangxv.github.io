@@ -48,7 +48,6 @@ module.exports = {
       '/basic/': 'structure',
       '/comment/': 'structure',
       '/informal/': 'structure',
-      '/interview/': 'structure',
     },
     navbar: require("./sidebar").nav,
     themeColor: {
