@@ -38,7 +38,16 @@ module.exports = {
     lastUpdated: "最后更新时间",
     editLink: false,
     contributors: false,
-    sidebar,
+    sidebar: {
+      '/frontend-basic/': 'structure',
+      '/frontend-advanced/': 'structure',
+      '/frontend-engineering/': 'structure',
+      '/tools/': 'structure',
+      '/algorithm/': 'structure',
+      '/basic/': 'structure',
+      '/comment/': 'structure',
+      '/informal/': 'structure',
+    },
     navbar: require("./sidebar").nav,
     themeColor: {
       blue: "#2196f3",
@@ -46,6 +55,7 @@ module.exports = {
       green: "#3eaf7c",
       orange: "#fb9b5f",
     },
+    iconAssets: "iconfont",
     plugins: {
       comment: {
         provider: "Giscus",

@@ -11,18 +11,19 @@ const nav = [
   // { text: "留言板", link: "/comment/" },
   {
     text: "前端开发",
+    icon: 'html',
     children: [
       { text: '前端基础', link: '/frontend-basic/' },
       { text: '前端进阶', link: '/frontend-advanced/' },
       { text: '前端工程化', link: '/frontend-engineering/' },
     ],
   },
-  { text: "开发工具", link: "/tools/" },
-  { text: "算法", link: "/algorithm/" },
-  { text: "计算机基础", link: "/basic/" },
-  { text: "随笔", link: "/informal/" },
-  { text: "面经", link: "/interview/" },
-  { text: "留言板", link: "/comment/" },
+  { text: "开发工具", link: "/tools/", icon: 'tool' },
+  { text: "算法", link: "/algorithm/", icon: 'state' },
+  { text: "计算机基础", link: "/basic/", icon: 'code' },
+  { text: "随笔", link: "/informal/", icon: 'write' },
+  { text: "面经", link: "/interview/", icon: 'strong' },
+  { text: "留言板", link: "/comment/", icon: 'comment' },
 ];
 
 let sideBarConfigArr = [];
@@ -49,6 +50,7 @@ function generateSideBar(pathline, sideBarConfig, url, item) {
         text: dir,
         path: `${url}/${dir}/`.replace(/\/+/g, "/"),
         children: [],
+        collapsable: true
       };
       generateSideBar(
         path.resolve(pathline, dir),
