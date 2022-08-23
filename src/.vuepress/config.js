@@ -38,6 +38,7 @@ module.exports = {
     lastUpdated: "最后更新时间",
     editLink: false,
     contributors: false,
+    copyright: true,
     sidebar: {
       '/frontend-basic/': 'structure',
       '/frontend-advanced/': 'structure',
