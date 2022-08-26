@@ -1,4 +1,4 @@
-# Webpack DllPlugin 实现原理
+# DllPlugin 实现原理
 
 DllPlugin 手写实现
 [源码实现地址](https://github.com/fyhhub/dll-plugin)
