@@ -2,6 +2,28 @@
 
 ## 一、AST 操作
 
+```js
+compiler.hooks.normalModuleFactory.tap("demo", (normalModuleFactory) => {
+  const handler = (parser) => {
+    parser.hooks.xxx.tap("demo", (statement, source) => {
+    });
+  }
+
+  // 监听 `parser` 钩子
+  normalModuleFactory.hooks.parser
+    .for("javascript/auto")
+    .tap("demo", handler);
+  normalModuleFactory.hooks.parser
+    .for("javascript/dynamic")
+    .tap("demo", handler);
+  normalModuleFactory.hooks.parser
+    .for("javascript/esm")
+    .tap("demo", handler);
+})
+
+
+```
+
 ### 1. 获取 import 或 require 依赖
 
 ```js
@@ -15,6 +37,25 @@ compiler.hooks.normalModuleFactory.tap("demo", (normalModuleFactory) => {
       });
       parser.hooks.call.for("require").tap("demo", (statement) => {
         // statement: CallExpression 调用表达式节点
+      });
+    });
+});
+```
+
+### 2. 表达式等
+```js
+compiler.hooks.normalModuleFactory.tap("demo", (normalModuleFactory) => {
+  normalModuleFactory.hooks.parser
+    .for("javascript/auto")
+    .tap("demo", (parser) => {
+      // 处理表达式ast
+      parser.hooks.expression.for(key).tap("demo", (expr) => {
+        /*...*/
+      });
+
+      // 处理typeof xxx
+      parser.hooks.typeof.for(key).tap("demo", (expr) => {
+        /*...*/
       });
     });
 });
@@ -71,6 +112,22 @@ compiler.hooks.compilation.tap(
 );
 ```
 
+
+### 3. 单个模块编译完成后
+```js
+compilation.hooks.succeedModule.tap('demo', ({ resource }) => {
+  // TODO
+});
+```
+
+### 4. 获取多个模块编译完成后
+
+```js
+compilation.hooks.finishModules.tap('demo', () => {
+  // TODO
+});
+```
+
 ## 三、index.html 操作
 
 ### 1. 插入标签
@@ -120,4 +177,29 @@ compiler.hooks.compilation.tap("PreloadWebpackPlugin", (compilation) => {
     }
   );
 });
+```
+
+四、资源操作
+
+### 1. 修改资源列表
+```js
+map(compilation.assets, (asset, filename) => {
+  // 读取产物内容
+  const assetSource = asset.source()
+  // 之后，使用优化版本替换原始文件
+  compilation.assets[filename] = new RawSource(新代码内容)
+})
+```
+
+
+五、日志系统
+
+### 1. 添加日志
+
+push Error对象
+
+```js
+compilation.warnings.push(warnings);
+
+compilation.errors.push(errors);
 ```
