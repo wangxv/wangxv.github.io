@@ -11,6 +11,7 @@
 |cac|创建命令行|
 |chokidar|文件变化监视库|
 |yorkie|yorkie作为git生命周期脚本配置插件|
+|signale|日志工具|
 
 
 ## 前端通用
