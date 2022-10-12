@@ -11,11 +11,3 @@
 3、提高用户体验
 
 4、降低服务器费用
-
-![Untitled](tensflow%20js%2077f50969d5fe498cb542b26a40ed0939/Untitled.png)
-
-![Untitled](tensflow%20js%2077f50969d5fe498cb542b26a40ed0939/Untitled%201.png)
-
-![Untitled](tensflow%20js%2077f50969d5fe498cb542b26a40ed0939/Untitled%202.png)
-
-![Untitled](tensflow%20js%2077f50969d5fe498cb542b26a40ed0939/Untitled%203.png)
