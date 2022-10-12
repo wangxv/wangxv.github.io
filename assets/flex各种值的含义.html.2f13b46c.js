@@ -1,0 +1,21 @@
+import{_ as n}from"./plugin-vue_export-helper.21dcd24c.js";import{o as s,c as a,e}from"./app.3f7b64ef.js";const t={},i=e(`<h1 id="flex-\u5404\u79CD\u503C\u7684\u542B\u4E49" tabindex="-1"><a class="header-anchor" href="#flex-\u5404\u79CD\u503C\u7684\u542B\u4E49" aria-hidden="true">#</a> flex \u5404\u79CD\u503C\u7684\u542B\u4E49</h1><h2 id="flex-none" tabindex="-1"><a class="header-anchor" href="#flex-none" aria-hidden="true">#</a> flex: none</h2><div class="language-css ext-css line-numbers-mode"><pre class="language-css"><code><span class="token selector">.item</span> <span class="token punctuation">{</span>
+  <span class="token property">flex-grow</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+  <span class="token property">flex-shrink</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+  <span class="token property">flex-basis</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="flex-auto" tabindex="-1"><a class="header-anchor" href="#flex-auto" aria-hidden="true">#</a> flex: auto</h2><div class="language-css ext-css line-numbers-mode"><pre class="language-css"><code><span class="token selector">.item</span> <span class="token punctuation">{</span>
+  <span class="token property">flex-grow</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
+  <span class="token property">flex-shrink</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
+  <span class="token property">flex-basis</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="flex-1" tabindex="-1"><a class="header-anchor" href="#flex-1" aria-hidden="true">#</a> flex: 1</h2><div class="language-css ext-css line-numbers-mode"><pre class="language-css"><code><span class="token selector">.item</span> <span class="token punctuation">{</span>
+  <span class="token property">flex-grow</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
+  <span class="token property">flex-shrink</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
+  <span class="token property">flex-basis</span><span class="token punctuation">:</span> 0%<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="flex-0-1-auto" tabindex="-1"><a class="header-anchor" href="#flex-0-1-auto" aria-hidden="true">#</a> flex:0 1 auto</h2><div class="language-css ext-css line-numbers-mode"><pre class="language-css"><code><span class="token selector">.item</span> <span class="token punctuation">{</span>
+  <span class="token property">flex-grow</span><span class="token punctuation">:</span> 0<span class="token punctuation">;</span>
+  <span class="token property">flex-shrink</span><span class="token punctuation">:</span> 1<span class="token punctuation">;</span>
+  <span class="token property">flex-basis</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,9),p=[i];function l(c,o){return s(),a("div",null,p)}var d=n(t,[["render",l],["__file","flex\u5404\u79CD\u503C\u7684\u542B\u4E49.html.vue"]]);export{d as default};

@@ -1,0 +1,8 @@
+import{_ as n}from"./plugin-vue_export-helper.21dcd24c.js";import{o as s,c as a,e}from"./app.3f7b64ef.js";const t={},p=e(`<h1 id="\u591A\u884C\u8D85\u51FA\u7701\u7565\u53F7" tabindex="-1"><a class="header-anchor" href="#\u591A\u884C\u8D85\u51FA\u7701\u7565\u53F7" aria-hidden="true">#</a> \u591A\u884C\u8D85\u51FA\u7701\u7565\u53F7</h1><div class="language-css ext-css line-numbers-mode"><pre class="language-css"><code><span class="token selector">p</span> <span class="token punctuation">{</span>
+  <span class="token property">display</span><span class="token punctuation">:</span> -webkit-box<span class="token punctuation">;</span>
+  <span class="token property">-webkit-box-orient</span><span class="token punctuation">:</span> vertical<span class="token punctuation">;</span>
+  <span class="token property">-webkit-line-clamp</span><span class="token punctuation">:</span> 3<span class="token punctuation">;</span>
+  <span class="token property">overflow</span><span class="token punctuation">:</span> hidden<span class="token punctuation">;</span>
+  <span class="token property">width</span><span class="token punctuation">:</span> 250px<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,2),c=[p];function i(o,l){return s(),a("div",null,c)}var d=n(t,[["render",i],["__file","\u591A\u884C\u8D85\u51FA\u7701\u7565\u53F7.html.vue"]]);export{d as default};
