@@ -4,7 +4,7 @@
 
 ## 功能展示
 功能最好包含生命周期、子组件父组件通信 <br/>
-<img src="/img/vue2-vue3_1.png" class="panda no-zoom" style="width: 50%;">
+<img src="/vue2-vue3_1.png" class="panda no-zoom" style="width: 50%;">
 ## vue2+ts实现
 子组件 `todoItem`
 ```vue
