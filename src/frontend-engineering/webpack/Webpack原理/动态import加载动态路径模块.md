@@ -73,9 +73,9 @@ var map = {
 ```
 意思就是先`动态加载执行 chunkid为1` 的文件, 然后执行`1.js`chunk中的`moduleId为2`的代码
 
-![20220826113345](https://raw.githubusercontent.com/fyhhub/imgs/main/imgs20220826113345.png)
+![20220826113345](https://raw.githubusercontent.com/wangxv/imgs/main/imgs20220826113345.png)
 
-![20220826113633](https://raw.githubusercontent.com/fyhhub/imgs/main/imgs20220826113633.png)
+![20220826113633](https://raw.githubusercontent.com/wangxv/imgs/main/imgs20220826113633.png)
 
 
 ::: info 总结
@@ -98,9 +98,9 @@ list.forEach(item => {
 
 打包后的产物如下:
 
-![20220826113959](https://raw.githubusercontent.com/fyhhub/imgs/main/imgs20220826113959.png)
+![20220826113959](https://raw.githubusercontent.com/wangxv/imgs/main/imgs20220826113959.png)
 
-![20220826114037](https://raw.githubusercontent.com/fyhhub/imgs/main/imgs20220826114037.png)
+![20220826114037](https://raw.githubusercontent.com/wangxv/imgs/main/imgs20220826114037.png)
 
 ::: info 总结
 不会生成各自单独的chunk，模块代码被合并到入口文件中
@@ -118,9 +118,9 @@ list.forEach(item => {
 })
 ```
 
-![20220826114338](https://raw.githubusercontent.com/fyhhub/imgs/main/imgs20220826114338.png)
+![20220826114338](https://raw.githubusercontent.com/wangxv/imgs/main/imgs20220826114338.png)
 
-![20220826114414](https://raw.githubusercontent.com/fyhhub/imgs/main/imgs20220826114414.png)
+![20220826114414](https://raw.githubusercontent.com/wangxv/imgs/main/imgs20220826114414.png)
 
 ::: info 总结
 会生成单独的chunk，多个chunk被合并成一个

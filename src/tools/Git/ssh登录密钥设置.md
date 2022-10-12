@@ -3,14 +3,14 @@
 1. 设置用户名和邮箱
 
 ```shell
-git config –global user.name "fyhhub"
-git config –global user.email "1131153523@qq.com"
+git config –global user.name "xxxx"
+git config –global user.email "xxxxxx@qq.com"
 ```
 
 2. 生成秘钥
 
 ```
-ssh-keygen -t rsa -C "1131153523@qq.com"
+ssh-keygen -t rsa -C "xxxxxxx@qq.com"
 ```
 然后连续回车
 

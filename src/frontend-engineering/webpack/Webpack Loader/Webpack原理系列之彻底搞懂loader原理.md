@@ -717,7 +717,7 @@ function processResource(processOptions, loaderContext, pitchingCallback) {
 }
 ```
 
-以上就是`loader-runner`的执行过程，是不是非常简单~，源码已放入[github](https://github.com/fyhhub/loader-runner)
+以上就是`loader-runner`的执行过程，是不是非常简单~，源码已放入[github](https://github.com/wangxv/loader-runner)
 
 ## 预告
 

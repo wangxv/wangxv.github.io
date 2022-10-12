@@ -4,7 +4,7 @@ const { hopeTheme } = require("vuepress-theme-hope");
 const { searchPlugin } = require("@vuepress/plugin-search");
 
 module.exports = {
-  title: "fyhub’s blog",
+  title: "wangxv’s blog",
   description: "博客",
   dest: path.resolve(__dirname, "../../docs"),
   base: "/",
@@ -21,10 +21,10 @@ module.exports = {
     }),
   ],
   theme: hopeTheme({
-    repo: "fyhhub/fyhhub.github.io",
+    repo: "wangxv/wangxv.github.io",
     repoLabel: "GitHub",
     repoDisplay: true,
-    lastUpdated: "最后更新时间1",
+    lastUpdated: "最后更新时间",
     editLink: false,
     contributors: false,
     copyright: true,
@@ -38,6 +38,7 @@ module.exports = {
       '/comment/': 'structure',
       '/informal/': 'structure',
       '/interview/': 'structure',
+      '/vue/': 'structure',
     },
     navbar: require("./sidebar").nav,
     themeColor: {

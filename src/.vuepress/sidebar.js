@@ -2,13 +2,6 @@ const path = require("path");
 const fs = require("fs");
 
 const nav = [
-  // { text: "首页", link: "/" },
-  // { text: "前端", link: "/frontend/" },
-  // { text: "算法", link: "/algorithm/" },
-  // { text: "计算机基础", link: "/basic/" },
-  // { text: "随笔", link: "/informal/" },
-  // { text: "面经", link: "/interview/" },
-  // { text: "留言板", link: "/comment/" },
   {
     text: "前端开发",
     icon: 'html',
@@ -16,6 +9,7 @@ const nav = [
       { text: '前端基础', link: '/frontend-basic/' },
       { text: '前端进阶', link: '/frontend-advanced/' },
       { text: '前端工程化', link: '/frontend-engineering/' },
+      { text: 'Vue系列', link: '/vue/' },
     ],
   },
   { text: "开发工具", link: "/tools/", icon: 'tool' },
@@ -23,7 +17,6 @@ const nav = [
   { text: "计算机基础", link: "/basic/", icon: 'code' },
   { text: "随笔", link: "/informal/", icon: 'write' },
   { text: "面经", link: "/interview/", icon: 'strong' },
-  { text: "留言板", link: "/comment/", icon: 'comment' },
 ];
 
 let sideBarConfigArr = [];

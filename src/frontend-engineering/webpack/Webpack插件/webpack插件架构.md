@@ -7,7 +7,7 @@ Webpack5 暴露了多达 200+ 个 Hook，基本上覆盖了整个构建流程的
 
 全局构建管理器，Webpack 启动后会首先创建 compiler 对象，负责管理配置信息、Loader、Plugin 等。从启动构建到结束，compiler 大致上会触发如下钩子：
 
-![20220905163959](https://raw.githubusercontent.com/fyhhub/imgs/main/imgs20220905163959.png)
+![20220905163959](https://raw.githubusercontent.com/wangxv/imgs/main/imgs20220905163959.png)
 
 + `createChildCompiler`：创建子 compiler 对象，子对象将继承原始 Compiler 对象的所有配置数据；
 + `createCompilation`：创建 compilation 对象，可以借此实现并行编译；
@@ -22,7 +22,7 @@ Webpack5 暴露了多达 200+ 个 Hook，基本上覆盖了整个构建流程的
 当 watch = true 时，每次文件变更触发重新编译，都会创建一个新的 compilation 对象；
 compilation 生命周期中主要触发如下钩子：
 
-![20220905164116](https://raw.githubusercontent.com/fyhhub/imgs/main/imgs20220905164116.png)
+![20220905164116](https://raw.githubusercontent.com/wangxv/imgs/main/imgs20220905164116.png)
 
 + `addModule`：用于添加模块，例如 Module 遍历出依赖之后，就会调用该接口将新模块添加到构建需求中；
 + `addEntry`：添加新的入口模块，效果与直接定义 entry 配置相似；
