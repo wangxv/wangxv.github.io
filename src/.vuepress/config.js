@@ -24,7 +24,7 @@ module.exports = {
     repo: "fyhhub/fyhhub.github.io",
     repoLabel: "GitHub",
     repoDisplay: true,
-    lastUpdated: "最后更新时间",
+    lastUpdated: "最后更新时间1",
     editLink: false,
     contributors: false,
     copyright: true,
