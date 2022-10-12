@@ -48,14 +48,6 @@ module.exports = {
     },
     iconAssets: "iconfont",
     plugins: {
-      comment: {
-        provider: "Giscus",
-        repo: "fyhhub/fyhhub.github.io",
-        repoId: "R_kgDOGcGXUw",
-        category: "General",
-        categoryId: "DIC_kwDOGcGXU84CQ1aV",
-        inputPosition: "bottom",
-      },
       mdEnhance: {
         demo: true,
         codetabs: true,
@@ -72,24 +64,5 @@ module.exports = {
     lineNumbers: true,
   },
   head: [
-    [
-      "script",
-      {},
-      `
-    var hm1
-    (function() {
-      hm1 = document.createElement("script");
-      hm1.src = "https://www.googletagmanager.com/gtag/js?id=G-BWGLYWG03M";
-      var s1 = document.getElementsByTagName("script")[0]; 
-      s1.parentNode.insertBefore(hm1, s1);
-    })();
-    hm1.onload = function() {
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-BWGLYWG03M');
-    }
-  `,
-    ],
   ],
 };
