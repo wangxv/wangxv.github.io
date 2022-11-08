@@ -1,0 +1,1 @@
+import{_ as r}from"./plugin-vue_export-helper.21dcd24c.js";import{o as a,c as o,a as e,b as t}from"./app.96d9e652.js";const c={},n=e("h1",{id:"rollup",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#rollup","aria-hidden":"true"},"#"),t(" Rollup")],-1),s=[n];function l(_,d){return a(),o("div",null,s)}var f=r(c,[["render",l],["__file","index.html.vue"]]);export{f as default};
